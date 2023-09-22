@@ -21,7 +21,6 @@
     <Folder Include="Data\Context\" />
     <Folder Include="Helpers\" />
     <Folder Include="Profiles\" />
-    <Folder Include="Services\" />
     <Folder Include="Data\Repositories\" />
   </ItemGroup>
 
