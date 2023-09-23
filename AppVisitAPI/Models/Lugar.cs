@@ -17,11 +17,11 @@ namespace AppVisitAPI.Models
         [Required]
         public int ArquivoId { get; set;}
 
-        public Arquivo Arquivo { get; set; }
+        public virtual Arquivo Arquivo { get; set; }
 
         [Required]
         public int CidadeId { get; set; }
-        public Cidade Cidade { get; set; }
+        public virtual Cidade Cidade { get; set; }
 
         [Required]
         public byte[] Imagem { get; set; }

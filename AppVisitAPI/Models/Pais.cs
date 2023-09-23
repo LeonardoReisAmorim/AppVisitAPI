@@ -11,6 +11,6 @@ namespace AppVisitAPI.Models
         [Required]
         public string Nome { get; set; }
 
-        public List<Estado> Estados { get; set; }
+        public virtual List<Estado> Estados { get; set; }
     }
 }
