@@ -1,83 +1,67 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AppVisitAPI.DTOs.PaisDTO;
+using AppVisitAPI.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
     public class PaisController : Controller
     {
-        // GET: PaisController
-        public ActionResult Index()
+        private PaisService _paisService;
+        public PaisController(PaisService paisService)
         {
-            return View();
+            _paisService = paisService;
         }
 
-        // GET: PaisController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public ActionResult GetPaises()
         {
-            return View();
+            var paises = _paisService.GetPais();
+            return Ok(paises);
         }
 
-        // GET: PaisController/Create
-        public ActionResult Create()
+        [HttpGet("{id}")]
+        public ActionResult GetPaisById(int id)
         {
-            return View();
+            var pais = _paisService.GetPais(id);
+            if(pais == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(pais);    
         }
 
-        // POST: PaisController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CriarPaisDTO paisDTO)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var paisCriado = _paisService.CreatePais(paisDTO);
+
+            return CreatedAtAction(nameof(GetPaisById), new { paisCriado.Id }, paisCriado);
         }
 
-        // GET: PaisController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpPut("{id}")]
+        public ActionResult EditPais(int id, [FromBody] EditarPaisDTO editarPaisDTO)
         {
-            return View();
+            var result = _paisService.UpdatePais(id, editarPaisDTO);
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
 
-        // POST: PaisController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [HttpDelete("{id}")]
+        public ActionResult DeletePais(int id)
         {
-            try
+            var result = _paisService.DeletePais(id);
+            if (result)
             {
-                return RedirectToAction(nameof(Index));
+                return NoContent();
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: PaisController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: PaisController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return NotFound();
         }
     }
 }

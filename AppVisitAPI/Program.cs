@@ -1,4 +1,5 @@
 using AppVisitAPI.Data.Context;
+using AppVisitAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Context>(x => x.UseLazyLoadingProxies().UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<PaisService, PaisService>();
+builder.Services.AddScoped<EstadoService, EstadoService>();
+builder.Services.AddScoped<CidadeService, CidadeService>();
+builder.Services.AddScoped<LugarService, LugarService>();
+builder.Services.AddScoped<ArquivoService, ArquivoService>();
 
 var app = builder.Build();
 
