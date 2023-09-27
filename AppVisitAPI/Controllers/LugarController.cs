@@ -1,36 +1,73 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AppVisitAPI.DTOs.LugarDTO;
+using AppVisitAPI.DTOs.PaisDTO;
+using AppVisitAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class LugarController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private LugarService _lugarService;
+        
+        public LugarController(LugarService lugarService)
         {
-            return new string[] { "value1", "value2" };
+            _lugarService = lugarService;
+        }
+
+        [HttpGet]
+        public ActionResult GetLugares()
+        {
+            var lugares = _lugarService.GetLugar();
+            return Ok(lugares);
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult GetLugarById(int id)
         {
-            return "value";
+            var lugar = _lugarService.GetLugar(id);
+
+            if (lugar.Count <= 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(lugar);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult CreateLugar(InserirLugarDTO lugarDTO)
         {
+            var lugarCriado = _lugarService.CreateLugar(lugarDTO);
+
+            return CreatedAtAction(nameof(GetLugarById), new { lugarCriado.Id }, lugarCriado);
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult EditLugar(int id, [FromBody] EditarLugarDTO editarLugarDTO)
         {
+            var result = _lugarService.UpdateLugar(id, editarLugarDTO);
+            
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult DeleteLugar(int id)
         {
+            var result = _lugarService.DeleteLugar(id);
+            
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
     }
 }

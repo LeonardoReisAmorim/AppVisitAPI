@@ -1,9 +1,11 @@
-﻿using AppVisitAPI.Services;
+﻿using AppVisitAPI.DTOs.CidadeDTO;
+using AppVisitAPI.DTOs.PaisDTO;
+using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class CidadeController : ControllerBase
     {
@@ -13,39 +15,55 @@ namespace AppVisitAPI.Controllers
             _cidadeService = cidade;
         }
 
-        // GET: api/<CidadeController>
         [HttpGet]
-        public IActionResult Get()
+        public ActionResult GetCidades()
         {
-            return Ok();
+            var cidades = _cidadeService.GetCidade();
+            return Ok(cidades);
         }
 
-        // GET api/<CidadeController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public ActionResult GetCidadeById(int id)
         {
-            return Ok();
+            var cidade = _cidadeService.GetCidade(id);
+            if (cidade == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cidade);
         }
 
-        // POST api/<CidadeController>
         [HttpPost]
-        public IActionResult Post([FromBody] string a)
+        public ActionResult CreateCidade(CriarCidadeDTO cidadeDTO)
         {
-            return Ok();
+            var cidadeCriada = _cidadeService.CreateCidade(cidadeDTO);
+
+            return CreatedAtAction(nameof(GetCidadeById), new { cidadeCriada.Id }, cidadeCriada);
         }
 
-        // PUT api/<CidadeController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] string value)
+        public ActionResult EditCidade(int id, [FromBody] EditarCidadeDTO editarCidadeDTO)
         {
-            return Ok();
+            var result = _cidadeService.UpdateCidade(id, editarCidadeDTO);
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
 
-        // DELETE api/<CidadeController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ActionResult DeleteCidade(int id)
         {
-            return Ok();
+            var result = _cidadeService.DeleteCidade(id);
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
     }
 }

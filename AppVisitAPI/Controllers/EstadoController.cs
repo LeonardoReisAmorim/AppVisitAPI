@@ -1,83 +1,70 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AppVisitAPI.DTOs.EstadoDTO;
+using AppVisitAPI.DTOs.PaisDTO;
+using AppVisitAPI.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
-    public class EstadoController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class EstadoController : ControllerBase
     {
-        // GET: EstadoController
-        public ActionResult Index()
+        private EstadoService _estadoService;
+        public EstadoController(EstadoService estadoService)
         {
-            return View();
+            _estadoService = estadoService;
         }
 
-        // GET: EstadoController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public ActionResult GetEstados()
         {
-            return View();
+            var estados = _estadoService.GetEstado();
+            return Ok(estados);
         }
 
-        // GET: EstadoController/Create
-        public ActionResult Create()
+        [HttpGet("{id}")]
+        public ActionResult GetEstadoById(int id)
         {
-            return View();
+            var estado = _estadoService.GetEstado(id);
+            if (estado == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(estado);
         }
 
-        // POST: EstadoController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult CreateEstado(CriarEstadoDTO estadoDTO)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var estadoCriado = _estadoService.CreateEstado(estadoDTO);
+
+            return CreatedAtAction(nameof(GetEstadoById), new { estadoCriado.Id }, estadoCriado);
         }
 
-        // GET: EstadoController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpPut("{id}")]
+        public ActionResult EditEstado(int id, [FromBody] EditarEstadoDTO editarEstadoDTO)
         {
-            return View();
+            var result = _estadoService.UpdateEstado(id, editarEstadoDTO);
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
 
-        // POST: EstadoController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [HttpDelete("{id}")]
+        public ActionResult DeleteEstado(int id)
         {
-            try
+            var result = _estadoService.DeleteEstado(id);
+            if (result)
             {
-                return RedirectToAction(nameof(Index));
+                return NoContent();
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: EstadoController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: EstadoController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return NotFound();
         }
     }
 }

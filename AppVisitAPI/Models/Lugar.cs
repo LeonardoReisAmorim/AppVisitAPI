@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AppVisitAPI.Models
 {
@@ -17,10 +18,14 @@ namespace AppVisitAPI.Models
         [Required]
         public int ArquivoId { get; set;}
 
+        [JsonIgnore]
         public virtual Arquivo Arquivo { get; set; }
 
         [Required]
+        [JsonIgnore]
         public int CidadeId { get; set; }
+
+        [JsonIgnore]
         public virtual Cidade Cidade { get; set; }
 
         [Required]

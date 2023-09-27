@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
-    public class PaisController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class PaisController : ControllerBase
     {
-        private PaisService _paisService;
+        public PaisService _paisService;
+
         public PaisController(PaisService paisService)
         {
             _paisService = paisService;
@@ -33,7 +36,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(CriarPaisDTO paisDTO)
+        public ActionResult CreatePais(CriarPaisDTO paisDTO)
         {
             var paisCriado = _paisService.CreatePais(paisDTO);
 
