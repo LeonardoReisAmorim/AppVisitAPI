@@ -1,4 +1,7 @@
-﻿namespace AppVisitAPI.DTOs.Lugar
+﻿using AppVisitAPI.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace AppVisitAPI.DTOs.LugarDTO
 {
     public class LerLugarDTO
     {

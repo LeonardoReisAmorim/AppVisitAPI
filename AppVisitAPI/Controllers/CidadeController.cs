@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AppVisitAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
@@ -6,36 +7,45 @@ namespace AppVisitAPI.Controllers
     [ApiController]
     public class CidadeController : ControllerBase
     {
+        private CidadeService _cidadeService;
+        public CidadeController(CidadeService cidade)
+        {
+            _cidadeService = cidade;
+        }
+
         // GET: api/<CidadeController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok();
         }
 
         // GET api/<CidadeController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            return Ok();
         }
 
         // POST api/<CidadeController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] string a)
         {
+            return Ok();
         }
 
         // PUT api/<CidadeController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] string value)
         {
+            return Ok();
         }
 
         // DELETE api/<CidadeController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            return Ok();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppVisitAPI.DTOs.Lugar
+namespace AppVisitAPI.DTOs.LugarDTO
 {
-    public class InserirLugarDTO
+    public class EditarLugarDTO
     {
         [Required]
         public string Nome { get; set; }
@@ -12,7 +12,7 @@ namespace AppVisitAPI.DTOs.Lugar
 
         [Required]
         public int ArquivoId { get; set; }
-        
+
         [Required]
         public int CidadeId { get; set; }
 

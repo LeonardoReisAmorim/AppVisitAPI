@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppVisitAPI.DTOs.Arquivo
+namespace AppVisitAPI.DTOs.ArquivoDTO
 {
     public class InserirArquivoDTO
     {
