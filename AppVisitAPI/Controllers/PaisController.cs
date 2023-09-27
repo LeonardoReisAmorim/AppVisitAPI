@@ -27,7 +27,8 @@ namespace AppVisitAPI.Controllers
         public ActionResult GetPaisById(int id)
         {
             var pais = _paisService.GetPais(id);
-            if(pais == null)
+
+            if(pais.Count <= 0)
             {
                 return NotFound();
             }
