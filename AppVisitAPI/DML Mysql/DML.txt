@@ -1,0 +1,3 @@
+﻿insert into paises values (1, "Brazil")
+insert into estados values (1,"Bahia",1)
+insert into cidades values (1,"Salvador",1)
