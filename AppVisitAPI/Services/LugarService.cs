@@ -3,6 +3,7 @@ using AppVisitAPI.DTOs.LugarDTO;
 using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Models;
 using AutoMapper;
+using Org.BouncyCastle.Utilities;
 
 namespace AppVisitAPI.Services
 {

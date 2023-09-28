@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AppVisitAPI.Models
 {
@@ -8,8 +10,10 @@ namespace AppVisitAPI.Models
         public int Id { get; set; }
 
         [Required]
+        [Column(TypeName = "LongBlob")]
         public byte[] File { get; set; }
 
+        [JsonIgnore]
         public virtual Lugar Lugar { get; set; }
 
     }

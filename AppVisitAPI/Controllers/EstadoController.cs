@@ -27,7 +27,8 @@ namespace AppVisitAPI.Controllers
         public ActionResult GetEstadoById(int id)
         {
             var estado = _estadoService.GetEstado(id);
-            if (estado == null)
+
+            if (estado.Count <= 0)
             {
                 return NotFound();
             }
@@ -36,7 +37,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateEstado(CriarEstadoDTO estadoDTO)
+        public ActionResult CreateEstado([FromBody] CriarEstadoDTO estadoDTO)
         {
             var estadoCriado = _estadoService.CreateEstado(estadoDTO);
 

@@ -1,41 +1,76 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AppVisitAPI.DTOs.ArquivoDTO;
+using AppVisitAPI.DTOs.EstadoDTO;
+using AppVisitAPI.Models;
+using AppVisitAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ArquivoController : ControllerBase
     {
-        // GET: api/<ArquivoController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private ArquivoService _arquivoService;
+        public ArquivoController(ArquivoService arquivoService)
         {
-            return new string[] { "value1", "value2" };
+            _arquivoService = arquivoService;
         }
 
-        // GET api/<ArquivoController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetArquivosById(int id)
         {
-            return "value";
+            var arquivo = _arquivoService.GetArquivoById(id);
+
+            if (arquivo == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(arquivo);
         }
 
-        // POST api/<ArquivoController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult CreateArquivo(IFormFile file)
         {
+            var arquivoCriado = new LerArquivoDTO();
+
+            if (file.Length > 0)
+            {
+                using (var Stream = new MemoryStream())
+                {
+                    file.CopyTo(Stream);
+
+                    arquivoCriado = _arquivoService.CreateArquivo(Stream.ToArray());
+                }
+            }
+
+            return CreatedAtAction(nameof(GetArquivosById), new { arquivoCriado.Id }, arquivoCriado);
         }
 
-        // PUT api/<ArquivoController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult UpdateArquivo(int id, [FromBody] EditarArquivo arquivoDTO)
         {
+            var result = _arquivoService.UpdateArquivo(id, arquivoDTO);
+
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
 
-        // DELETE api/<ArquivoController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult DeleteArquivo(int id)
         {
+            var result = _arquivoService.DeleteArquivo(id);
+
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
     }
 }

@@ -28,9 +28,12 @@ namespace AppVisitAPI.Profiles
             CreateMap<EditarCidadeDTO, Cidade>();
 
             //lugar
-            CreateMap<InserirLugarDTO, Lugar>();
-            CreateMap<Lugar, LerLugarDTO>();
-            CreateMap<EditarLugarDTO, Lugar>();
+            CreateMap<InserirLugarDTO, Lugar>()
+                .ForMember(x => x.Imagem, y => y.MapFrom(a => Convert.FromBase64String(a.Imagem)));
+            CreateMap<Lugar, LerLugarDTO>()
+                .ForMember(x => x.Imagem, y => y.MapFrom(a => Convert.ToBase64String(a.Imagem)));
+            CreateMap<EditarLugarDTO, Lugar>()
+                .ForMember(x => x.Imagem, y => y.MapFrom(a => Convert.FromBase64String(a.Imagem)));
         }
     }
 }

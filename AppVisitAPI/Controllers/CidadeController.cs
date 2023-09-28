@@ -26,7 +26,8 @@ namespace AppVisitAPI.Controllers
         public ActionResult GetCidadeById(int id)
         {
             var cidade = _cidadeService.GetCidade(id);
-            if (cidade == null)
+
+            if (cidade.Count <= 0)
             {
                 return NotFound();
             }
@@ -35,7 +36,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateCidade(CriarCidadeDTO cidadeDTO)
+        public ActionResult CreateCidade([FromBody] CriarCidadeDTO cidadeDTO)
         {
             var cidadeCriada = _cidadeService.CreateCidade(cidadeDTO);
 

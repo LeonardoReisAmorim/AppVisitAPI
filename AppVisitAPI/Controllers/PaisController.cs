@@ -37,7 +37,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreatePais(CriarPaisDTO paisDTO)
+        public ActionResult CreatePais([FromBody] CriarPaisDTO paisDTO)
         {
             var paisCriado = _paisService.CreatePais(paisDTO);
 

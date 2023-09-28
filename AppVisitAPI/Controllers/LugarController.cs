@@ -37,7 +37,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateLugar(InserirLugarDTO lugarDTO)
+        public ActionResult CreateLugar([FromBody] InserirLugarDTO lugarDTO)
         {
             var lugarCriado = _lugarService.CreateLugar(lugarDTO);
 
