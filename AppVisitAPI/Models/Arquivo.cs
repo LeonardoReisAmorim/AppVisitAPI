@@ -10,7 +10,6 @@ namespace AppVisitAPI.Models
         public int Id { get; set; }
 
         [Required]
-        [Column(TypeName = "LongBlob")]
         public byte[] File { get; set; }
 
         [JsonIgnore]

@@ -30,8 +30,10 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateArquivo(IFormFile file)
+        public ActionResult CreateArquivo()
         {
+            var file = Request.Form.Files[0];
+
             var arquivoCriado = new LerArquivoDTO();
 
             if (file.Length > 0)
