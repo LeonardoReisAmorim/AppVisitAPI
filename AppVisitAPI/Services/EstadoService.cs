@@ -1,15 +1,15 @@
 ﻿using AppVisitAPI.Data.Context;
 using AppVisitAPI.DTOs.EstadoDTO;
-using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppVisitAPI.Services
 {
     public class EstadoService
     {
-        private Context _context;
-        private IMapper _mapper;
+        private readonly Context _context;
+        private readonly IMapper _mapper;
 
         public EstadoService(Context context, IMapper mapper)
         {
@@ -17,12 +17,12 @@ namespace AppVisitAPI.Services
             _mapper = mapper;
         }
 
-        public LerEstadoDTO CreateEstado(CriarEstadoDTO estadoDTO)
+        public async Task<LerEstadoDTO> CreateEstado(CriarEstadoDTO estadoDTO)
         {
             try
             {
                 Estado estado = _mapper.Map<Estado>(estadoDTO);
-                _context.Estados.Add(estado);
+                await _context.Estados.AddAsync(estado);
                 _context.SaveChanges();
                 return _mapper.Map<LerEstadoDTO>(estado);
             }
@@ -32,25 +32,25 @@ namespace AppVisitAPI.Services
             }
         }
 
-        public List<LerEstadoDTO> GetEstado(int? id = null)
+        public async Task<List<LerEstadoDTO>> GetEstado(int? id = null)
         {
             var estadosDTO = new List<LerEstadoDTO>();
 
             if (id.HasValue)
             {
-                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(_context.Estados.Where(pais => pais.Id == id).ToList());
+                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.Where(estado => estado.Id == id).ToListAsync());
             }
             else
             {
-                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(_context.Estados.ToList());
+                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.ToListAsync());
             }
 
             return estadosDTO;
         }
 
-        public bool UpdateEstado(int id, EditarEstadoDTO updateEstadoDTO)
+        public async Task<bool> UpdateEstado(int id, EditarEstadoDTO updateEstadoDTO)
         {
-            var estado = _context.Estados.FirstOrDefault(pais => pais.Id == id);
+            var estado = await _context.Estados.FirstOrDefaultAsync(estado => estado.Id == id);
 
             if (estado != null)
             {
@@ -62,9 +62,9 @@ namespace AppVisitAPI.Services
             return false;
         }
 
-        public bool DeleteEstado(int id)
+        public async Task<bool> DeleteEstado(int id)
         {
-            var estado = _context.Estados.FirstOrDefault(pais => pais.Id == id);
+            var estado = await _context.Estados.FirstOrDefaultAsync(estado => estado.Id == id);
 
             if (estado != null)
             {

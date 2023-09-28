@@ -1,7 +1,5 @@
 ﻿using AppVisitAPI.DTOs.EstadoDTO;
-using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
@@ -17,16 +15,16 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetEstados()
+        public async Task<ActionResult> GetEstados()
         {
-            var estados = _estadoService.GetEstado();
+            var estados = await _estadoService.GetEstado();
             return Ok(estados);
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetEstadoById(int id)
+        public async Task<ActionResult> GetEstadoById(int id)
         {
-            var estado = _estadoService.GetEstado(id);
+            var estado = await _estadoService.GetEstado(id);
 
             if (estado.Count <= 0)
             {
@@ -37,17 +35,18 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateEstado([FromBody] CriarEstadoDTO estadoDTO)
+        public async Task<ActionResult> CreateEstado([FromBody] CriarEstadoDTO estadoDTO)
         {
-            var estadoCriado = _estadoService.CreateEstado(estadoDTO);
+            var estadoCriado = await _estadoService.CreateEstado(estadoDTO);
 
             return CreatedAtAction(nameof(GetEstadoById), new { estadoCriado.Id }, estadoCriado);
         }
 
         [HttpPut("{id}")]
-        public ActionResult EditEstado(int id, [FromBody] EditarEstadoDTO editarEstadoDTO)
+        public async Task<ActionResult> EditEstado(int id, [FromBody] EditarEstadoDTO editarEstadoDTO)
         {
-            var result = _estadoService.UpdateEstado(id, editarEstadoDTO);
+            var result = await _estadoService.UpdateEstado(id, editarEstadoDTO);
+
             if (result)
             {
                 return NoContent();
@@ -57,9 +56,10 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteEstado(int id)
+        public async Task<ActionResult> DeleteEstado(int id)
         {
-            var result = _estadoService.DeleteEstado(id);
+            var result = await _estadoService.DeleteEstado(id);
+
             if (result)
             {
                 return NoContent();

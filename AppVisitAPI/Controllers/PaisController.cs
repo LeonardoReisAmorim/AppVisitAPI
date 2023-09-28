@@ -17,16 +17,16 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetPaises()
+        public async Task<ActionResult> GetPaises()
         {
-            var paises = _paisService.GetPais();
+            var paises = await _paisService.GetPais();
             return Ok(paises);
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetPaisById(int id)
+        public async Task<ActionResult> GetPaisById(int id)
         {
-            var pais = _paisService.GetPais(id);
+            var pais = await _paisService.GetPais(id);
 
             if(pais.Count <= 0)
             {
@@ -37,17 +37,18 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreatePais([FromBody] CriarPaisDTO paisDTO)
+        public async Task<ActionResult> CreatePais([FromBody] CriarPaisDTO paisDTO)
         {
-            var paisCriado = _paisService.CreatePais(paisDTO);
+            var paisCriado = await _paisService.CreatePais(paisDTO);
 
             return CreatedAtAction(nameof(GetPaisById), new { paisCriado.Id }, paisCriado);
         }
 
         [HttpPut("{id}")]
-        public ActionResult EditPais(int id, [FromBody] EditarPaisDTO editarPaisDTO)
+        public async Task<ActionResult> EditPais(int id, [FromBody] EditarPaisDTO editarPaisDTO)
         {
-            var result = _paisService.UpdatePais(id, editarPaisDTO);
+            var result = await _paisService.UpdatePais(id, editarPaisDTO);
+
             if (result)
             {
                 return NoContent();
@@ -57,9 +58,10 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeletePais(int id)
+        public async Task<ActionResult> DeletePais(int id)
         {
-            var result = _paisService.DeletePais(id);
+            var result = await _paisService.DeletePais(id);
+
             if (result)
             {
                 return NoContent();

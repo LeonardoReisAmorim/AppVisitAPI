@@ -1,22 +1,22 @@
 ﻿using AppVisitAPI.Data.Context;
 using AppVisitAPI.DTOs.ArquivoDTO;
 using AppVisitAPI.Models;
-using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppVisitAPI.Services
 {
     public class ArquivoService
     {
-        private Context _context;
+        private readonly Context _context;
 
         public ArquivoService(Context context)
         {
             _context = context;
         }
 
-        public LerArquivoDTO GetArquivoById(int id)
+        public async Task<LerArquivoDTO> GetArquivoById(int id)
         {
-            var arquivo = _context.Arquivos.FirstOrDefault(x => x.Id == id);
+            var arquivo = await _context.Arquivos.FirstOrDefaultAsync(x => x.Id == id);
 
             if (arquivo == null)
             {
@@ -32,14 +32,14 @@ namespace AppVisitAPI.Services
             return arquivoDto;
         }
 
-        public LerArquivoDTO CreateArquivo(byte[] arquivoDTO)
+        public async Task<LerArquivoDTO> CreateArquivo(byte[] arquivoDTO)
         {
             var arquivo = new Arquivo
             {
                 File = arquivoDTO
             };
 
-            _context.Arquivos.Add(arquivo);
+            await _context.Arquivos.AddAsync(arquivo);
             _context.SaveChanges();
 
             var returnArquivoDTO = new LerArquivoDTO
@@ -50,9 +50,9 @@ namespace AppVisitAPI.Services
             return returnArquivoDTO;
         }
 
-        public bool UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
+        public async Task<bool> UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            var arquivo = _context.Arquivos.FirstOrDefault(arquivo => arquivo.Id == id);
+            var arquivo = await _context.Arquivos.FirstOrDefaultAsync(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {
@@ -65,9 +65,9 @@ namespace AppVisitAPI.Services
             return true;
         }
 
-        public bool DeleteArquivo(int id)
+        public async Task<bool> DeleteArquivo(int id)
         {
-            var arquivo = _context.Arquivos.FirstOrDefault(arquivo => arquivo.Id == id);
+            var arquivo = await _context.Arquivos.FirstOrDefaultAsync(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {

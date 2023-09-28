@@ -2,13 +2,14 @@
 using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppVisitAPI.Services
 {
     public class PaisService
     {
-        private Context _context;
-        private IMapper _mapper;
+        private readonly Context _context;
+        private readonly IMapper _mapper;
 
         public PaisService(Context context, IMapper mapper)
         {
@@ -16,12 +17,12 @@ namespace AppVisitAPI.Services
             _mapper = mapper;
         }
 
-        public LerPaisDTO CreatePais(CriarPaisDTO paisDTO)
+        public async Task<LerPaisDTO> CreatePais(CriarPaisDTO paisDTO)
         {
             try
             {
                 Pais pais = _mapper.Map<Pais>(paisDTO);
-                _context.Paises.Add(pais);
+                await _context.Paises.AddAsync(pais);
                 _context.SaveChanges();
                 return _mapper.Map<LerPaisDTO>(pais);
             }
@@ -31,25 +32,25 @@ namespace AppVisitAPI.Services
             }
         }
 
-        public List<LerPaisDTO> GetPais(int? id = null)
+        public async Task<List<LerPaisDTO>> GetPais(int? id = null)
         {
             var paisesDTO = new List<LerPaisDTO>();
 
             if(id.HasValue)
             {
-                paisesDTO = _mapper.Map<List<LerPaisDTO>>(_context.Paises.Where(pais => pais.Id == id).ToList());
+                paisesDTO = _mapper.Map<List<LerPaisDTO>>(await _context.Paises.Where(pais => pais.Id == id).ToListAsync());
             }
             else
             {
-                paisesDTO = _mapper.Map<List<LerPaisDTO>>(_context.Paises.ToList());
+                paisesDTO = _mapper.Map<List<LerPaisDTO>>(await _context.Paises.ToListAsync());
             }
 
             return paisesDTO;
         }
 
-        public bool UpdatePais(int id, EditarPaisDTO updatePaisDTO)
+        public async Task<bool> UpdatePais(int id, EditarPaisDTO updatePaisDTO)
         {
-            var pais = _context.Paises.FirstOrDefault(pais => pais.Id == id);
+            var pais = await _context.Paises.FirstOrDefaultAsync(pais => pais.Id == id);
 
             if(pais != null)
             {
@@ -61,9 +62,9 @@ namespace AppVisitAPI.Services
             return false;
         }
 
-        public bool DeletePais(int id)
+        public async Task<bool> DeletePais(int id)
         {
-            var pais = _context.Paises.FirstOrDefault(pais => pais.Id == id);
+            var pais = await _context.Paises.FirstOrDefaultAsync(pais => pais.Id == id);
 
             if (pais != null)
             {

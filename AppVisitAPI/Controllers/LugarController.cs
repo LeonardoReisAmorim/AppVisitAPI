@@ -1,5 +1,4 @@
 ﻿using AppVisitAPI.DTOs.LugarDTO;
-using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,16 +16,16 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetLugares()
+        public async Task<ActionResult> GetLugares()
         {
-            var lugares = _lugarService.GetLugar();
+            var lugares = await _lugarService.GetLugar();
             return Ok(lugares);
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetLugarById(int id)
+        public async Task<ActionResult> GetLugarById(int id)
         {
-            var lugar = _lugarService.GetLugar(id);
+            var lugar = await _lugarService.GetLugar(id);
 
             if (lugar.Count <= 0)
             {
@@ -37,17 +36,17 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateLugar([FromBody] InserirLugarDTO lugarDTO)
+        public async Task<ActionResult> CreateLugar([FromBody] InserirLugarDTO lugarDTO)
         {
-            var lugarCriado = _lugarService.CreateLugar(lugarDTO);
+            var lugarCriado = await _lugarService.CreateLugar(lugarDTO);
 
             return CreatedAtAction(nameof(GetLugarById), new { lugarCriado.Id }, lugarCriado);
         }
 
         [HttpPut("{id}")]
-        public ActionResult EditLugar(int id, [FromBody] EditarLugarDTO editarLugarDTO)
+        public async Task<ActionResult> EditLugar(int id, [FromBody] EditarLugarDTO editarLugarDTO)
         {
-            var result = _lugarService.UpdateLugar(id, editarLugarDTO);
+            var result = await _lugarService.UpdateLugar(id, editarLugarDTO);
             
             if (result)
             {
@@ -58,9 +57,9 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteLugar(int id)
+        public async Task<ActionResult> DeleteLugar(int id)
         {
-            var result = _lugarService.DeleteLugar(id);
+            var result = await _lugarService.DeleteLugar(id);
             
             if (result)
             {

@@ -1,6 +1,4 @@
 ﻿using AppVisitAPI.DTOs.ArquivoDTO;
-using AppVisitAPI.DTOs.EstadoDTO;
-using AppVisitAPI.Models;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +15,9 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetArquivosById(int id)
+        public async Task<IActionResult> GetArquivosById(int id)
         {
-            var arquivo = _arquivoService.GetArquivoById(id);
+            var arquivo = await _arquivoService.GetArquivoById(id);
 
             if (arquivo == null)
             {
@@ -30,7 +28,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateArquivo()
+        public async Task<ActionResult> CreateArquivo()
         {
             var file = Request.Form.Files[0];
 
@@ -42,7 +40,7 @@ namespace AppVisitAPI.Controllers
                 {
                     file.CopyTo(Stream);
 
-                    arquivoCriado = _arquivoService.CreateArquivo(Stream.ToArray());
+                    arquivoCriado = await _arquivoService.CreateArquivo(Stream.ToArray());
                 }
             }
 
@@ -50,9 +48,9 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateArquivo(int id, [FromBody] EditarArquivo arquivoDTO)
+        public async Task<IActionResult> UpdateArquivo(int id, [FromBody] EditarArquivo arquivoDTO)
         {
-            var result = _arquivoService.UpdateArquivo(id, arquivoDTO);
+            var result = await _arquivoService.UpdateArquivo(id, arquivoDTO);
 
             if (result)
             {
@@ -63,9 +61,9 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteArquivo(int id)
+        public async Task<IActionResult> DeleteArquivo(int id)
         {
-            var result = _arquivoService.DeleteArquivo(id);
+            var result = await _arquivoService.DeleteArquivo(id);
 
             if (result)
             {

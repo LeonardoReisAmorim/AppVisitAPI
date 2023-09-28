@@ -1,5 +1,4 @@
 ﻿using AppVisitAPI.DTOs.CidadeDTO;
-using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,16 +15,16 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetCidades()
+        public async Task<ActionResult> GetCidades()
         {
-            var cidades = _cidadeService.GetCidade();
+            var cidades = await _cidadeService.GetCidade();
             return Ok(cidades);
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetCidadeById(int id)
+        public async Task<ActionResult> GetCidadeById(int id)
         {
-            var cidade = _cidadeService.GetCidade(id);
+            var cidade = await _cidadeService.GetCidade(id);
 
             if (cidade.Count <= 0)
             {
@@ -36,17 +35,18 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateCidade([FromBody] CriarCidadeDTO cidadeDTO)
+        public async Task<ActionResult> CreateCidade([FromBody] CriarCidadeDTO cidadeDTO)
         {
-            var cidadeCriada = _cidadeService.CreateCidade(cidadeDTO);
+            var cidadeCriada = await _cidadeService.CreateCidade(cidadeDTO);
 
             return CreatedAtAction(nameof(GetCidadeById), new { cidadeCriada.Id }, cidadeCriada);
         }
 
         [HttpPut("{id}")]
-        public ActionResult EditCidade(int id, [FromBody] EditarCidadeDTO editarCidadeDTO)
+        public async Task<ActionResult> EditCidade(int id, [FromBody] EditarCidadeDTO editarCidadeDTO)
         {
-            var result = _cidadeService.UpdateCidade(id, editarCidadeDTO);
+            var result = await _cidadeService.UpdateCidade(id, editarCidadeDTO);
+
             if (result)
             {
                 return NoContent();
@@ -56,9 +56,10 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteCidade(int id)
+        public async Task<ActionResult> DeleteCidade(int id)
         {
-            var result = _cidadeService.DeleteCidade(id);
+            var result = await _cidadeService.DeleteCidade(id);
+
             if (result)
             {
                 return NoContent();
