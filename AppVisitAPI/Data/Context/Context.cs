@@ -7,7 +7,7 @@ namespace AppVisitAPI.Data.Context
     {
         public Context(DbContextOptions<Context> opt) : base(opt)
         {
-            
+            this.Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
