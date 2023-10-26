@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   appvisitapi:
-    image: web_api
+    image: leoreisamorim/web_api
     build:
       context: .
       dockerfile: Dockerfile
