@@ -25,7 +25,6 @@ namespace AppVisitAPI.Services
 
             var arquivoDto = new LerArquivoDTO
             {
-                Id = id,
                 Arquivo = Convert.ToBase64String(arquivo.File)
             };
 
