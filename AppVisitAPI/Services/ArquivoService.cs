@@ -31,7 +31,7 @@ namespace AppVisitAPI.Services
             return arquivoDto;
         }
 
-        public async Task<LerArquivoDTO> CreateArquivo(byte[] arquivoDTO)
+        public async Task<int> CreateArquivo(byte[] arquivoDTO)
         {
             var arquivo = new Arquivo
             {
@@ -40,13 +40,8 @@ namespace AppVisitAPI.Services
 
             await _context.Arquivos.AddAsync(arquivo);
             _context.SaveChanges();
-
-            var returnArquivoDTO = new LerArquivoDTO
-            {
-                Id = arquivo.Id
-            };
            
-            return returnArquivoDTO;
+            return arquivo.Id;
         }
 
         public async Task<bool> UpdateArquivo(int id, EditarArquivo editarArquivoDTO)

@@ -32,7 +32,7 @@ namespace AppVisitAPI.Controllers
         {
             var file = Request.Form.Files[0];
 
-            var arquivoCriado = new LerArquivoDTO();
+            int IdarquivoCriado = 0;
 
             if (file.Length > 0)
             {
@@ -40,13 +40,14 @@ namespace AppVisitAPI.Controllers
                 {
                     file.CopyTo(Stream);
 
-                    arquivoCriado = await _arquivoService.CreateArquivo(Stream.ToArray());
+                    IdarquivoCriado = await _arquivoService.CreateArquivo(Stream.ToArray());
                 }
             }
 
-            return CreatedAtAction(nameof(GetArquivosById), new { arquivoCriado.Id }, arquivoCriado);
+            //return CreatedAtAction(nameof(GetArquivosById), new { id = IdarquivoCriado });
+            return Ok();
         }
-        //TODO - 415 - unsupported media type save apk file in sql server - RESOLVER
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateArquivo(int id)
         {
