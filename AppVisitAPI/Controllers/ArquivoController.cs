@@ -32,6 +32,11 @@ namespace AppVisitAPI.Controllers
         {
             var file = Request.Form.Files[0];
 
+            if (!file.FileName.Contains(".zip"))
+            {
+                return BadRequest("Somente arquivos .zip são importados");
+            }
+
             int IdarquivoCriado = 0;
 
             if (file.Length > 0)
