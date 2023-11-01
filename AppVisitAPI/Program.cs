@@ -1,5 +1,7 @@
 using AppVisitAPI.Data.Context;
 using AppVisitAPI.Services;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,18 @@ builder.Services.AddScoped<EstadoService, EstadoService>();
 builder.Services.AddScoped<CidadeService, CidadeService>();
 builder.Services.AddScoped<LugarService, LugarService>();
 builder.Services.AddScoped<ArquivoService, ArquivoService>();
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = long.MaxValue;
+});
+
+builder.Services.Configure<FormOptions>(x =>
+{
+    x.ValueLengthLimit = int.MaxValue;
+    x.MultipartBodyLengthLimit = long.MaxValue;
+    x.MultipartHeadersLengthLimit = int.MaxValue;
+});
 
 var app = builder.Build();
 

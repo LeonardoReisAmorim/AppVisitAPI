@@ -31,13 +31,12 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> CreateArquivo()
         {
             var file = Request.Form.Files[0];
+            var lerArquivo = new LerArquivoDTO();
 
             if (!file.FileName.Contains(".zip"))
             {
                 return BadRequest("Somente arquivos .zip são importados");
             }
-
-            int IdarquivoCriado = 0;
 
             if (file.Length > 0)
             {
@@ -45,12 +44,11 @@ namespace AppVisitAPI.Controllers
                 {
                     file.CopyTo(Stream);
 
-                    IdarquivoCriado = await _arquivoService.CreateArquivo(Stream.ToArray());
+                    lerArquivo = await _arquivoService.CreateArquivo(Stream.ToArray());
                 }
             }
 
-            //return CreatedAtAction(nameof(GetArquivosById), new { id = IdarquivoCriado });
-            return Ok();
+            return CreatedAtAction(nameof(GetArquivosById), new { lerArquivo.Id }, lerArquivo);
         }
 
         [HttpPut("{id}")]

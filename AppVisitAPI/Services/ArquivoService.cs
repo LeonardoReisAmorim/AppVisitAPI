@@ -25,14 +25,16 @@ namespace AppVisitAPI.Services
 
             var arquivoDto = new LerArquivoDTO
             {
+                Id = arquivo.Id,
                 Arquivo = Convert.ToBase64String(arquivo.File)
             };
 
             return arquivoDto;
         }
 
-        public async Task<int> CreateArquivo(byte[] arquivoDTO)
+        public async Task<LerArquivoDTO> CreateArquivo(byte[] arquivoDTO)
         {
+            
             var arquivo = new Arquivo
             {
                 File = arquivoDTO
@@ -40,8 +42,13 @@ namespace AppVisitAPI.Services
 
             await _context.Arquivos.AddAsync(arquivo);
             _context.SaveChanges();
-           
-            return arquivo.Id;
+
+            var lerArquivo = new LerArquivoDTO
+            {
+                Id=arquivo.Id
+            };
+
+            return lerArquivo;
         }
 
         public async Task<bool> UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
