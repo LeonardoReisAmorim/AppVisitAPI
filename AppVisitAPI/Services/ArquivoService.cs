@@ -21,7 +21,7 @@ namespace AppVisitAPI.Services
             return arquivo;
         }
 
-        public async Task<LerArquivoDTO> CreateArquivo(byte[] arquivoDTO)
+        public LerArquivoDTO CreateArquivo(byte[] arquivoDTO)
         {
             
             var arquivo = new Arquivo
@@ -29,7 +29,7 @@ namespace AppVisitAPI.Services
                 FilePlace = arquivoDTO
             };
 
-            await _context.Arquivos.AddAsync(arquivo);
+            _context.Arquivos.Add(arquivo);
             _context.SaveChanges();
 
             var lerArquivo = new LerArquivoDTO
@@ -40,9 +40,9 @@ namespace AppVisitAPI.Services
             return lerArquivo;
         }
 
-        public async Task<bool> UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
+        public bool UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            var arquivo = await _context.Arquivos.FirstOrDefaultAsync(arquivo => arquivo.Id == id);
+            var arquivo = _context.Arquivos.FirstOrDefault(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {
@@ -55,9 +55,9 @@ namespace AppVisitAPI.Services
             return true;
         }
 
-        public async Task<bool> DeleteArquivo(int id)
+        public bool DeleteArquivo(int id)
         {
-            var arquivo = await _context.Arquivos.FirstOrDefaultAsync(arquivo => arquivo.Id == id);
+            var arquivo = _context.Arquivos.FirstOrDefault(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {
