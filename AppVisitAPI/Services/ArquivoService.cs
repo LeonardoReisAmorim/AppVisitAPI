@@ -14,22 +14,19 @@ namespace AppVisitAPI.Services
             _context = context;
         }
 
-        public async Task<LerArquivoDTO> GetArquivoById(int id)
+        public async Task<byte[]> GetArquivoById(int id)
         {
-            var arquivo = await _context.Arquivos.FirstOrDefaultAsync(x => x.Id == id);
+            var arquivo = await _context.Arquivos.AsNoTracking()
+                                .Where(x => x.Id == id)
+                                .Select(x => x.File)
+                                .FirstAsync();
 
             if (arquivo == null)
             {
                 return null;
             }
 
-            var arquivoDto = new LerArquivoDTO
-            {
-                Id = arquivo.Id,
-                Arquivo = Convert.ToBase64String(arquivo.File)
-            };
-
-            return arquivoDto;
+            return arquivo;
         }
 
         public async Task<LerArquivoDTO> CreateArquivo(byte[] arquivoDTO)

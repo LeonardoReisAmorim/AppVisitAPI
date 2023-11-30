@@ -24,7 +24,12 @@ namespace AppVisitAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(arquivo);
+            var result = new FileContentResult(arquivo, "application/zip")
+            {
+                FileDownloadName = "arquivo.zip"
+            };
+
+            return result;
         }
 
         [HttpPost]
