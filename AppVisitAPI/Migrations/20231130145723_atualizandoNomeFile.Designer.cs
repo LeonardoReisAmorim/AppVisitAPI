@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppVisitAPI.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231130072652_create")]
-    partial class create
+    [Migration("20231130145723_atualizandoNomeFile")]
+    partial class atualizandoNomeFile
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace AppVisitAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("File")
+                    b.Property<byte[]>("FilePlace")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 

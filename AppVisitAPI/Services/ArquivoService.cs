@@ -14,17 +14,9 @@ namespace AppVisitAPI.Services
             _context = context;
         }
 
-        public async Task<byte[]> GetArquivoById(int id)
+        public byte[] GetArquivoById(int id)
         {
-            var arquivo = await _context.Arquivos.AsNoTracking()
-                                .Where(x => x.Id == id)
-                                .Select(x => x.File)
-                                .FirstAsync();
-
-            if (arquivo == null)
-            {
-                return null;
-            }
+            var arquivo = _context.Arquivos.AsNoTracking().Where(x => x.Id == id).Select(x => x.FilePlace).First();
 
             return arquivo;
         }
@@ -34,7 +26,7 @@ namespace AppVisitAPI.Services
             
             var arquivo = new Arquivo
             {
-                File = arquivoDTO
+                FilePlace = arquivoDTO
             };
 
             await _context.Arquivos.AddAsync(arquivo);
@@ -57,7 +49,7 @@ namespace AppVisitAPI.Services
                 return false;
             }
 
-            arquivo.File = editarArquivoDTO.Arquivo;
+            arquivo.FilePlace = editarArquivoDTO.Arquivo;
             _context.SaveChanges();
 
             return true;

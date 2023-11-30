@@ -10,7 +10,7 @@ namespace AppVisitAPI.Models
         public int Id { get; set; }
 
         [Required]
-        public byte[] File { get; set; }
+        public byte[] FilePlace { get; set; }
 
         [JsonIgnore]
         public virtual Lugar Lugar { get; set; }

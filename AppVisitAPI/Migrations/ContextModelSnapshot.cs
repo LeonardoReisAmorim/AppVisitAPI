@@ -32,7 +32,7 @@ namespace AppVisitAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("File")
+                    b.Property<byte[]>("FilePlace")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 

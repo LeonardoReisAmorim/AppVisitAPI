@@ -15,9 +15,9 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetArquivosById(int id)
+        public IActionResult GetArquivosById(int id)
         {
-            var arquivo = await _arquivoService.GetArquivoById(id);
+            var arquivo = _arquivoService.GetArquivoById(id);
 
             if (arquivo == null)
             {
