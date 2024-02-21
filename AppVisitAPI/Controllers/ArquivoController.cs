@@ -33,7 +33,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateArquivo()
+        public IActionResult CreateArquivo()
         {
             var file = Request.Form.Files[0];
             var lerArquivo = new LerArquivoDTO();

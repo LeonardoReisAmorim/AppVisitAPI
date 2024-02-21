@@ -34,6 +34,12 @@ builder.Services.Configure<FormOptions>(x =>
     x.MultipartHeadersLengthLimit = int.MaxValue;
 });
 
+//services cors
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,7 +49,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+//app cors
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors("corsapp");
+app.UseAuthorization();
 
 app.UseAuthorization();
 
