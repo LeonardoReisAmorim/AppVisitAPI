@@ -8,7 +8,5 @@ namespace AppVisitAPI.DTOs.CidadeDTO
         public int Id { get; set; }
 
         public string Nome { get; set; }
-
-        public virtual List<Lugar> Lugares { get; set; }
     }
 }

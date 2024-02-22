@@ -6,6 +6,5 @@ namespace AppVisitAPI.DTOs.PaisDTO
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public List<Estado> Estados { get; set; }
     }
 }

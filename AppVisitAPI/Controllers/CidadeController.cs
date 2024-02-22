@@ -8,7 +8,7 @@ namespace AppVisitAPI.Controllers
     [ApiController]
     public class CidadeController : ControllerBase
     {
-        private CidadeService _cidadeService;
+        private readonly CidadeService _cidadeService;
         public CidadeController(CidadeService cidade)
         {
             _cidadeService = cidade;

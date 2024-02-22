@@ -8,7 +8,7 @@ namespace AppVisitAPI.Controllers
     [ApiController]
     public class ArquivoController : ControllerBase
     {
-        private ArquivoService _arquivoService;
+        private readonly ArquivoService _arquivoService;
         public ArquivoController(ArquivoService arquivoService)
         {
             _arquivoService = arquivoService;

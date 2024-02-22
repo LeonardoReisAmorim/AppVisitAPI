@@ -7,7 +7,5 @@ namespace AppVisitAPI.DTOs.EstadoDTO
         public int Id { get; set; }
 
         public string Nome { get; set; }
-
-        public List<Cidade> Cidades { get; set; }
     }
 }

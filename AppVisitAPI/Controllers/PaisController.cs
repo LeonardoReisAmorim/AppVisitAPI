@@ -1,6 +1,5 @@
 ﻿using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers

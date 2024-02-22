@@ -38,6 +38,11 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateLugar([FromBody] InserirLugarDTO lugarDTO)
         {
+            if(lugarDTO.ArquivoId == 0)
+            {
+                return BadRequest("Não é possível criar um lugar sem um arquivo");
+            }
+
             var lugarCriado = await _lugarService.CreateLugar(lugarDTO);
 
             return CreatedAtAction(nameof(GetLugarById), new { lugarCriado.Id }, lugarCriado);

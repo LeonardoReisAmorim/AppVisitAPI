@@ -8,7 +8,7 @@ namespace AppVisitAPI.Controllers
     [Route("[controller]")]
     public class EstadoController : ControllerBase
     {
-        private EstadoService _estadoService;
+        private readonly EstadoService _estadoService;
         public EstadoController(EstadoService estadoService)
         {
             _estadoService = estadoService;
