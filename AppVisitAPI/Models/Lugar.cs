@@ -25,10 +25,10 @@ namespace AppVisitAPI.Models
         [JsonIgnore]
         public int CidadeId { get; set; }
 
-        [JsonIgnore]
-        public virtual Cidade Cidade { get; set; }
-
         [Required]
         public byte[] Imagem { get; set; }
+
+        [JsonIgnore]
+        public virtual Cidade Cidade { get; set; }
     }
 }

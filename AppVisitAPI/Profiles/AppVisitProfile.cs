@@ -12,22 +12,18 @@ namespace AppVisitAPI.Profiles
     {
         public AppVisitProfile()
         {
-            //pais
             CreateMap<CriarPaisDTO, Pais>();
             CreateMap<Pais, LerPaisDTO>();
             CreateMap<EditarPaisDTO, Pais>();
 
-            //estado
             CreateMap<CriarEstadoDTO, Estado>();
             CreateMap<Estado, LerEstadoDTO>();
             CreateMap<EditarEstadoDTO, Estado>();
 
-            //cidade
             CreateMap<CriarCidadeDTO, Cidade>();
             CreateMap<Cidade, LerCidadeDTO>();
             CreateMap<EditarCidadeDTO, Cidade>();
 
-            //lugar
             CreateMap<InserirLugarDTO, Lugar>()
                 .ForMember(x => x.Imagem, y => y.MapFrom(a => Convert.FromBase64String(a.Imagem)));
             CreateMap<Lugar, LerLugarDTO>()

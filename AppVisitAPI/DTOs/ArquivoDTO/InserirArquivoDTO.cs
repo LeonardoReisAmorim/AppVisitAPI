@@ -5,6 +5,8 @@ namespace AppVisitAPI.DTOs.ArquivoDTO
     public class InserirArquivoDTO
     {
         [Required]
-        public byte[] Arquivo { get; set; }
+        public string NomeArquivo { get; set; }
+        [Required]
+        public DateTime DataCriacao { get; set; }
     }
 }

@@ -16,17 +16,30 @@ namespace AppVisitAPI.Services
 
         public byte[] GetArquivoById(int id)
         {
-            var arquivo = _context.Arquivos.AsNoTracking().Where(x => x.Id == id).Select(x => x.FilePlace).First();
+            var arquivo = _context.Arquivos.AsNoTracking().Where(x => x.Id == id).Select(x => x.ArquivoConteudo).First();
 
             return arquivo;
         }
 
-        public LerArquivoDTO CreateArquivo(byte[] arquivoDTO)
+        public IEnumerable<LerDadosArquivoDTO> GetDadosArquivo()
         {
-            
+            var dadosArquivo = _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
+            {
+                Id = a.Id,
+                NomeArquivo = a.NomeArquivo,
+                DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
+            });
+
+            return dadosArquivo;
+        }
+
+        public LerArquivoDTO CreateArquivo(byte[] arquivoDTO, InserirArquivoDTO arquivodados)
+        {
             var arquivo = new Arquivo
             {
-                FilePlace = arquivoDTO
+                ArquivoConteudo = arquivoDTO,
+                NomeArquivo = arquivodados.NomeArquivo,
+                DataCriacao = arquivodados.DataCriacao
             };
 
             _context.Arquivos.Add(arquivo);
@@ -34,7 +47,7 @@ namespace AppVisitAPI.Services
 
             var lerArquivo = new LerArquivoDTO
             {
-                Id=arquivo.Id
+                Id = arquivo.Id
             };
 
             return lerArquivo;
@@ -49,7 +62,7 @@ namespace AppVisitAPI.Services
                 return false;
             }
 
-            arquivo.FilePlace = editarArquivoDTO.Arquivo;
+            arquivo.ArquivoConteudo = editarArquivoDTO.Arquivo;
             _context.SaveChanges();
 
             return true;

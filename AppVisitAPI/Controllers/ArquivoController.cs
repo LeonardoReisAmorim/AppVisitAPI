@@ -1,6 +1,7 @@
 ﻿using AppVisitAPI.DTOs.ArquivoDTO;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AppVisitAPI.Controllers
 {
@@ -32,16 +33,31 @@ namespace AppVisitAPI.Controllers
             return result;
         }
 
+        [HttpGet("dadosArquivos")]
+        public IActionResult GetDadosArquivos()
+        {
+            var dadosarquivo = _arquivoService.GetDadosArquivo();
+
+            if (dadosarquivo == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dadosarquivo);
+        }
+
         [HttpPost]
         public IActionResult CreateArquivo()
         {
             var file = Request.Form.Files[0];
             var lerArquivo = new LerArquivoDTO();
-
+            
             if (!file.FileName.Contains(".zip"))
             {
                 return BadRequest("Somente arquivos .zip são importados");
             }
+
+            var inserirArquivoDTO = JsonConvert.DeserializeObject<InserirArquivoDTO>(Request.Form.FirstOrDefault().Value);
 
             if (file.Length > 0)
             {
@@ -49,7 +65,7 @@ namespace AppVisitAPI.Controllers
                 {
                     file.CopyTo(Stream);
 
-                    lerArquivo = _arquivoService.CreateArquivo(Stream.ToArray());
+                    lerArquivo = _arquivoService.CreateArquivo(Stream.ToArray(), inserirArquivoDTO);
                 }
             }
 
