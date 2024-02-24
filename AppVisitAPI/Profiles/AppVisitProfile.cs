@@ -1,5 +1,4 @@
-﻿using AppVisitAPI.DTOs.ArquivoDTO;
-using AppVisitAPI.DTOs.CidadeDTO;
+﻿using AppVisitAPI.DTOs.CidadeDTO;
 using AppVisitAPI.DTOs.EstadoDTO;
 using AppVisitAPI.DTOs.LugarDTO;
 using AppVisitAPI.DTOs.PaisDTO;

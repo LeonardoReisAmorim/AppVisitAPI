@@ -1,7 +1,4 @@
-﻿using AppVisitAPI.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace AppVisitAPI.DTOs.LugarDTO
+﻿namespace AppVisitAPI.DTOs.LugarDTO
 {
     public class LerLugarDTO
     {
@@ -10,5 +7,7 @@ namespace AppVisitAPI.DTOs.LugarDTO
         public int ArquivoId { get; set; }
         public string Descricao { get; set; }
         public string Imagem { get; set; }
+        public string Cidade { get; set; }
+        public string NomeArquivo { get; set; }
     }
 }

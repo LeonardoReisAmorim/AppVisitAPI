@@ -38,11 +38,38 @@ namespace AppVisitAPI.Services
 
             if (id.HasValue)
             {
-                lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares.Where(lugar => lugar.Id == id).ToListAsync());
+                lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+                                                           .Where(lugar => lugar.Id == id)
+                                                           .Include(lugar => lugar.Arquivo)
+                                                           .Include(lugar => lugar.Cidade)
+                                                           .Select(lugar => new LerLugarDTO
+                                                           {
+                                                               ArquivoId = lugar.ArquivoId,
+                                                               Cidade = lugar.Cidade.Nome,
+                                                               Descricao = lugar.Descricao,
+                                                               Id = lugar.Id,
+                                                               Imagem = Convert.ToBase64String(lugar.Imagem),
+                                                               Nome = lugar.Nome,
+                                                               NomeArquivo = lugar.Arquivo.NomeArquivo
+                                                           })
+                                                           .ToListAsync());
             }
             else
             {
-                lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares.ToListAsync());
+                lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+                                                            .Include(lugar => lugar.Arquivo)
+                                                            .Include(lugar => lugar.Cidade)
+                                                            .Select(lugar => new LerLugarDTO
+                                                            {
+                                                               ArquivoId = lugar.ArquivoId,
+                                                               Cidade = lugar.Cidade.Nome,
+                                                               Descricao = lugar.Descricao,
+                                                               Id = lugar.Id,
+                                                               Imagem = Convert.ToBase64String(lugar.Imagem),
+                                                               Nome = lugar.Nome,
+                                                               NomeArquivo = lugar.Arquivo.NomeArquivo
+                                                            })
+                                                            .ToListAsync());
             }
 
             return lugaresDTO;
