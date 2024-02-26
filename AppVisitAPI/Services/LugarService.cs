@@ -26,7 +26,7 @@ namespace AppVisitAPI.Services
                 _context.SaveChanges();
                 return _mapper.Map<LerLugarDTO>(lugar);
             }
-            catch
+            catch(Exception ex)
             {
                 return null;
             }
@@ -51,7 +51,8 @@ namespace AppVisitAPI.Services
                                                                Id = lugar.Id,
                                                                Imagem = Convert.ToBase64String(lugar.Imagem),
                                                                Nome = lugar.Nome,
-                                                               NomeArquivo = lugar.Arquivo.NomeArquivo
+                                                               NomeArquivo = lugar.Arquivo.NomeArquivo,
+                                                               CidadeId = lugar.CidadeId,
                                                            })
                                                            .ToListAsync());
             }
@@ -69,7 +70,8 @@ namespace AppVisitAPI.Services
                                                                Id = lugar.Id,
                                                                Imagem = Convert.ToBase64String(lugar.Imagem),
                                                                Nome = lugar.Nome,
-                                                               NomeArquivo = lugar.Arquivo.NomeArquivo
+                                                               NomeArquivo = lugar.Arquivo.NomeArquivo,
+                                                               CidadeId = lugar.CidadeId,
                                                             })
                                                             .ToListAsync());
             }
@@ -84,6 +86,7 @@ namespace AppVisitAPI.Services
             if (lugar != null)
             {
                 _mapper.Map(updateLugarDTO, lugar);
+                _context.Entry(lugar).State = EntityState.Modified;
                 _context.SaveChanges();
                 return true;
             }

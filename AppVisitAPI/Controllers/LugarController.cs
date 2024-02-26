@@ -39,9 +39,9 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateLugar([FromBody] InserirLugarDTO lugarDTO)
         {
-            if(lugarDTO.ArquivoId == 0)
+            if(lugarDTO.ArquivoId == 0 || lugarDTO.CidadeId == 0)
             {
-                return BadRequest("Não é possível criar um lugar sem um arquivo");
+                return BadRequest("necessário informar o arquivo e a cidade");
             }
 
             var lugarCriado = await _lugarService.CreateLugar(lugarDTO);
@@ -52,6 +52,11 @@ namespace AppVisitAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditLugar(int id, [FromBody] EditarLugarDTO editarLugarDTO)
         {
+            if(editarLugarDTO.CidadeId == 0 || editarLugarDTO.ArquivoId == 0)
+            {
+                return BadRequest("necessário informar o arquivo e a cidade");
+            }
+
             var result = await _lugarService.UpdateLugar(id, editarLugarDTO);
             
             if (result)
