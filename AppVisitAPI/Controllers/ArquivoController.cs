@@ -37,12 +37,6 @@ namespace AppVisitAPI.Controllers
         public IActionResult GetDadosArquivos()
         {
             var dadosarquivo = _arquivoService.GetDadosArquivo();
-
-            if (dadosarquivo is null || !dadosarquivo.Any())
-            {
-                return NotFound();
-            }
-
             return Ok(dadosarquivo);
         }
 

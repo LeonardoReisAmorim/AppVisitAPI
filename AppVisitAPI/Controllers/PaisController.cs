@@ -20,12 +20,6 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetPaises()
         {
             var paises = await _paisService.GetPais();
-
-            if (paises is null || !paises.Any())
-            {
-                return NotFound();
-            }
-
             return Ok(paises);
         }
 

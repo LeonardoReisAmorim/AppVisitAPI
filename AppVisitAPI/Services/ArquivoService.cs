@@ -2,6 +2,7 @@
 using AppVisitAPI.DTOs.ArquivoDTO;
 using AppVisitAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AppVisitAPI.Services
 {
@@ -69,7 +70,7 @@ namespace AppVisitAPI.Services
 
         public bool UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            var arquivo = _context.Arquivos.AsNoTracking().FirstOrDefault(arquivo => arquivo.Id == id);
+            var arquivo = _context.Arquivos.AsNoTracking().SingleOrDefault(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {
@@ -78,6 +79,7 @@ namespace AppVisitAPI.Services
 
             arquivo.ArquivoConteudo = editarArquivoDTO.Arquivo;
             arquivo.NomeArquivo = editarArquivoDTO.NomeArquivo;
+            _context.Entry(arquivo).State = EntityState.Modified;
             _context.SaveChanges();
 
             return true;
@@ -85,7 +87,7 @@ namespace AppVisitAPI.Services
 
         public bool DeleteArquivo(int id)
         {
-            var arquivo = _context.Arquivos.AsNoTracking().FirstOrDefault(arquivo => arquivo.Id == id);
+            var arquivo = _context.Arquivos.AsNoTracking().SingleOrDefault(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {

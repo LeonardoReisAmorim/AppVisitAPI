@@ -19,12 +19,6 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetEstados()
         {
             var estados = await _estadoService.GetEstado();
-
-            if (estados is null || !estados.Any())
-            {
-                return NotFound();
-            }
-
             return Ok(estados);
         }
 

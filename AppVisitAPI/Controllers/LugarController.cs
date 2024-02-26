@@ -20,12 +20,6 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetLugares()
         {
             var lugares = await _lugarService.GetLugar();
-
-            if (lugares is null || !lugares.Any())
-            {
-                return NotFound();
-            }
-
             return Ok(lugares);
         }
 

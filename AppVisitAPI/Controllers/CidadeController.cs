@@ -19,12 +19,6 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetCidades()
         {
             var cidades = await _cidadeService.GetCidade();
-
-            if (cidades is null || !cidades.Any())
-            {
-                return NotFound();
-            }
-
             return Ok(cidades);
         }
 
