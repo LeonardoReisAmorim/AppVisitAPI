@@ -20,7 +20,7 @@ namespace AppVisitAPI.Controllers
         {
             var arquivo = _arquivoService.GetArquivoById(id);
 
-            if (arquivo == null)
+            if (arquivo is null || !arquivo.Any())
             {
                 return NotFound();
             }
@@ -38,7 +38,20 @@ namespace AppVisitAPI.Controllers
         {
             var dadosarquivo = _arquivoService.GetDadosArquivo();
 
-            if (dadosarquivo == null)
+            if (dadosarquivo is null || !dadosarquivo.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(dadosarquivo);
+        }
+
+        [HttpGet("dadosArquivos/{id}")]
+        public IActionResult GetDadosArquivosById(int id)
+        {
+            var dadosarquivo = _arquivoService.GetDadosArquivo(id);
+
+            if (dadosarquivo is null || !dadosarquivo.Any())
             {
                 return NotFound();
             }

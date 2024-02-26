@@ -1,4 +1,5 @@
 ﻿using AppVisitAPI.DTOs.CidadeDTO;
+using AppVisitAPI.Models;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,12 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetCidades()
         {
             var cidades = await _cidadeService.GetCidade();
+
+            if (cidades is null || !cidades.Any())
+            {
+                return NotFound();
+            }
+
             return Ok(cidades);
         }
 
@@ -26,7 +33,7 @@ namespace AppVisitAPI.Controllers
         {
             var cidade = await _cidadeService.GetCidade(id);
 
-            if (cidade.Count <= 0)
+            if (cidade is null || !cidade.Any())
             {
                 return NotFound();
             }

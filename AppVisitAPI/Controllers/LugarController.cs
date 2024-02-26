@@ -1,4 +1,5 @@
 ﻿using AppVisitAPI.DTOs.LugarDTO;
+using AppVisitAPI.Models;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,12 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetLugares()
         {
             var lugares = await _lugarService.GetLugar();
+
+            if (lugares is null || !lugares.Any())
+            {
+                return NotFound();
+            }
+
             return Ok(lugares);
         }
 
@@ -27,7 +34,7 @@ namespace AppVisitAPI.Controllers
         {
             var lugar = await _lugarService.GetLugar(id);
 
-            if (lugar.Count <= 0)
+            if (lugar is null || !lugar.Any())
             {
                 return NotFound();
             }

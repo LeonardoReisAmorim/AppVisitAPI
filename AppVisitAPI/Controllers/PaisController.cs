@@ -1,4 +1,5 @@
 ﻿using AppVisitAPI.DTOs.PaisDTO;
+using AppVisitAPI.Models;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,12 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetPaises()
         {
             var paises = await _paisService.GetPais();
+
+            if (paises is null || !paises.Any())
+            {
+                return NotFound();
+            }
+
             return Ok(paises);
         }
 
@@ -27,7 +34,7 @@ namespace AppVisitAPI.Controllers
         {
             var pais = await _paisService.GetPais(id);
 
-            if(pais.Count <= 0)
+            if(pais is null || !pais.Any())
             {
                 return NotFound();
             }

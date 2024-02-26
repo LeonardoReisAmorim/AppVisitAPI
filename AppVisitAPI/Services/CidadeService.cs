@@ -38,11 +38,11 @@ namespace AppVisitAPI.Services
 
             if (id.HasValue)
             {
-                cidadesDTO = _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.Where(cidade => cidade.Id == id).ToListAsync());
+                cidadesDTO = _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.AsNoTracking().Where(cidade => cidade.Id == id).ToListAsync());
             }
             else
             {
-                cidadesDTO = _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.ToListAsync());
+                cidadesDTO = _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.AsNoTracking().ToListAsync());
             }
 
             return cidadesDTO;
@@ -50,7 +50,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateCidade(int id, EditarCidadeDTO updateCidadeDTO)
         {
-            var cidade = await _context.Cidades.FirstOrDefaultAsync(cidade => cidade.Id == id);
+            var cidade = await _context.Cidades.AsNoTracking().FirstOrDefaultAsync(cidade => cidade.Id == id);
 
             if (cidade != null)
             {
@@ -64,7 +64,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> DeleteCidade(int id)
         {
-            var cidade = await _context.Cidades.FirstOrDefaultAsync(cidade => cidade.Id == id);
+            var cidade = await _context.Cidades.AsNoTracking().FirstOrDefaultAsync(cidade => cidade.Id == id);
 
             if (cidade != null)
             {

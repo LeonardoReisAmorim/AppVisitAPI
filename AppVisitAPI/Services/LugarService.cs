@@ -39,6 +39,7 @@ namespace AppVisitAPI.Services
             if (id.HasValue)
             {
                 lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+                                                           .AsNoTracking()
                                                            .Where(lugar => lugar.Id == id)
                                                            .Include(lugar => lugar.Arquivo)
                                                            .Include(lugar => lugar.Cidade)
@@ -57,6 +58,7 @@ namespace AppVisitAPI.Services
             else
             {
                 lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+                                                            .AsNoTracking()
                                                             .Include(lugar => lugar.Arquivo)
                                                             .Include(lugar => lugar.Cidade)
                                                             .Select(lugar => new LerLugarDTO
@@ -77,7 +79,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
         {
-            var lugar = await _context.Lugares.FirstOrDefaultAsync(lugar => lugar.Id == id);
+            var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
 
             if (lugar != null)
             {
@@ -91,7 +93,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> DeleteLugar(int id)
         {
-            var lugar = await _context.Lugares.FirstOrDefaultAsync(lugar => lugar.Id == id);
+            var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
 
             if (lugar != null)
             {

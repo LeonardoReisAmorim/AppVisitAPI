@@ -21,14 +21,28 @@ namespace AppVisitAPI.Services
             return arquivo;
         }
 
-        public IEnumerable<LerDadosArquivoDTO> GetDadosArquivo()
+        public IEnumerable<LerDadosArquivoDTO> GetDadosArquivo(int? id = null)
         {
-            var dadosArquivo = _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
+            var dadosArquivo = new List<LerDadosArquivoDTO>();
+
+            if(id.HasValue)
             {
-                Id = a.Id,
-                NomeArquivo = a.NomeArquivo,
-                DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
-            });
+                dadosArquivo = _context.Arquivos.AsNoTracking().Where(a => a.Id == id).Select(a => new LerDadosArquivoDTO
+                {
+                    Id = a.Id,
+                    NomeArquivo = a.NomeArquivo,
+                    DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
+                }).ToList();
+            }
+            else
+            {
+                dadosArquivo = _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
+                {
+                    Id = a.Id,
+                    NomeArquivo = a.NomeArquivo,
+                    DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
+                }).ToList();
+            }
 
             return dadosArquivo;
         }
@@ -55,7 +69,7 @@ namespace AppVisitAPI.Services
 
         public bool UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            var arquivo = _context.Arquivos.FirstOrDefault(arquivo => arquivo.Id == id);
+            var arquivo = _context.Arquivos.AsNoTracking().FirstOrDefault(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {
@@ -71,7 +85,7 @@ namespace AppVisitAPI.Services
 
         public bool DeleteArquivo(int id)
         {
-            var arquivo = _context.Arquivos.FirstOrDefault(arquivo => arquivo.Id == id);
+            var arquivo = _context.Arquivos.AsNoTracking().FirstOrDefault(arquivo => arquivo.Id == id);
 
             if (arquivo == null)
             {

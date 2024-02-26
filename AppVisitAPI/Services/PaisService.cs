@@ -38,11 +38,11 @@ namespace AppVisitAPI.Services
 
             if(id.HasValue)
             {
-                paisesDTO = _mapper.Map<List<LerPaisDTO>>(await _context.Paises.Where(pais => pais.Id == id).ToListAsync());
+                paisesDTO = _mapper.Map<List<LerPaisDTO>>(await _context.Paises.AsNoTracking().Where(pais => pais.Id == id).ToListAsync());
             }
             else
             {
-                paisesDTO = _mapper.Map<List<LerPaisDTO>>(await _context.Paises.ToListAsync());
+                paisesDTO = _mapper.Map<List<LerPaisDTO>>(await _context.Paises.AsNoTracking().ToListAsync());
             }
 
             return paisesDTO;
@@ -50,7 +50,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdatePais(int id, EditarPaisDTO updatePaisDTO)
         {
-            var pais = await _context.Paises.FirstOrDefaultAsync(pais => pais.Id == id);
+            var pais = await _context.Paises.AsNoTracking().FirstOrDefaultAsync(pais => pais.Id == id);
 
             if(pais != null)
             {
@@ -64,7 +64,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> DeletePais(int id)
         {
-            var pais = await _context.Paises.FirstOrDefaultAsync(pais => pais.Id == id);
+            var pais = await _context.Paises.AsNoTracking().FirstOrDefaultAsync(pais => pais.Id == id);
 
             if (pais != null)
             {

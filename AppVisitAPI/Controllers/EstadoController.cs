@@ -1,4 +1,5 @@
 ﻿using AppVisitAPI.DTOs.EstadoDTO;
+using AppVisitAPI.Models;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,12 @@ namespace AppVisitAPI.Controllers
         public async Task<ActionResult> GetEstados()
         {
             var estados = await _estadoService.GetEstado();
+
+            if (estados is null || !estados.Any())
+            {
+                return NotFound();
+            }
+
             return Ok(estados);
         }
 
@@ -26,7 +33,7 @@ namespace AppVisitAPI.Controllers
         {
             var estado = await _estadoService.GetEstado(id);
 
-            if (estado.Count <= 0)
+            if (estado is null || !estado.Any())
             {
                 return NotFound();
             }

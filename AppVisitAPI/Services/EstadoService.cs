@@ -38,11 +38,11 @@ namespace AppVisitAPI.Services
 
             if (id.HasValue)
             {
-                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.Where(estado => estado.Id == id).ToListAsync());
+                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.AsNoTracking().Where(estado => estado.Id == id).ToListAsync());
             }
             else
             {
-                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.ToListAsync());
+                estadosDTO = _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.AsNoTracking().ToListAsync());
             }
 
             return estadosDTO;
@@ -50,7 +50,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateEstado(int id, EditarEstadoDTO updateEstadoDTO)
         {
-            var estado = await _context.Estados.FirstOrDefaultAsync(estado => estado.Id == id);
+            var estado = await _context.Estados.AsNoTracking().FirstOrDefaultAsync(estado => estado.Id == id);
 
             if (estado != null)
             {
@@ -64,7 +64,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> DeleteEstado(int id)
         {
-            var estado = await _context.Estados.FirstOrDefaultAsync(estado => estado.Id == id);
+            var estado = await _context.Estados.AsNoTracking().FirstOrDefaultAsync(estado => estado.Id == id);
 
             if (estado != null)
             {
