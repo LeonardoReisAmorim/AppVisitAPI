@@ -63,6 +63,7 @@ namespace AppVisitAPI.Services
             }
 
             arquivo.ArquivoConteudo = editarArquivoDTO.Arquivo;
+            arquivo.NomeArquivo = editarArquivoDTO.NomeArquivo;
             _context.SaveChanges();
 
             return true;

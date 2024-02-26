@@ -76,19 +76,18 @@ namespace AppVisitAPI.Controllers
         public IActionResult UpdateArquivo(int id)
         {
             var file = Request.Form.Files[0];
-            var EditarArquivoDTO = new EditarArquivo();
+            var EditarArquivoDTO = JsonConvert.DeserializeObject<EditarArquivo>(Request.Form.FirstOrDefault().Value);
 
             if (file.Length > 0)
             {
                 using (var Stream = new MemoryStream())
                 {
                     file.CopyTo(Stream);
-
                     EditarArquivoDTO.Arquivo = Stream.ToArray();
                 }
             }
 
-            
+
             var result = _arquivoService.UpdateArquivo(id, EditarArquivoDTO);
 
             if (result)
