@@ -22,27 +22,27 @@ namespace AppVisitAPI.Services
             return arquivo;
         }
 
-        public IEnumerable<LerDadosArquivoDTO> GetDadosArquivo(int? id = null)
+        public async Task<IEnumerable<LerDadosArquivoDTO>> GetDadosArquivo(int? id = null)
         {
             var dadosArquivo = new List<LerDadosArquivoDTO>();
 
             if(id.HasValue)
             {
-                dadosArquivo = _context.Arquivos.AsNoTracking().Where(a => a.Id == id).Select(a => new LerDadosArquivoDTO
+                dadosArquivo = await _context.Arquivos.AsNoTracking().Where(a => a.Id == id).Select(a => new LerDadosArquivoDTO
                 {
                     Id = a.Id,
                     NomeArquivo = a.NomeArquivo,
                     DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
-                }).ToList();
+                }).ToListAsync();
             }
             else
             {
-                dadosArquivo = _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
+                dadosArquivo = await _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
                 {
                     Id = a.Id,
                     NomeArquivo = a.NomeArquivo,
                     DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
-                }).ToList();
+                }).ToListAsync();
             }
 
             return dadosArquivo;

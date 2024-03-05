@@ -34,16 +34,16 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet("dadosArquivos")]
-        public IActionResult GetDadosArquivos()
+        public async Task<IActionResult> GetDadosArquivos()
         {
-            var dadosarquivo = _arquivoService.GetDadosArquivo();
+            var dadosarquivo = await _arquivoService.GetDadosArquivo();
             return Ok(dadosarquivo);
         }
 
         [HttpGet("dadosArquivos/{id}")]
-        public IActionResult GetDadosArquivosById(int id)
+        public async Task<IActionResult> GetDadosArquivosById(int id)
         {
-            var dadosarquivo = _arquivoService.GetDadosArquivo(id);
+            var dadosarquivo = await _arquivoService.GetDadosArquivo(id);
 
             if (dadosarquivo is null || !dadosarquivo.Any())
             {
@@ -83,6 +83,12 @@ namespace AppVisitAPI.Controllers
         public IActionResult UpdateArquivo(int id)
         {
             var file = Request.Form.Files[0];
+
+            if (!file.FileName.Contains(".zip"))
+            {
+                return BadRequest(new { erro = "Somente arquivos .zip são importados" } );
+            }
+
             var EditarArquivoDTO = JsonConvert.DeserializeObject<EditarArquivo>(Request.Form.FirstOrDefault().Value);
 
             if (file.Length > 0)
@@ -93,7 +99,6 @@ namespace AppVisitAPI.Controllers
                     EditarArquivoDTO.Arquivo = Stream.ToArray();
                 }
             }
-
 
             var result = _arquivoService.UpdateArquivo(id, EditarArquivoDTO);
 
