@@ -41,7 +41,7 @@ namespace AppVisitAPI.Controllers
         {
             if(lugarDTO.ArquivoId == 0 || lugarDTO.CidadeId == 0)
             {
-                return BadRequest("necessário informar o arquivo e a cidade");
+                return BadRequest(new { error = "necessário informar o arquivo e a cidade" });
             }
 
             var lugarCriado = await _lugarService.CreateLugar(lugarDTO);
@@ -54,7 +54,7 @@ namespace AppVisitAPI.Controllers
         {
             if(editarLugarDTO.CidadeId == 0 || editarLugarDTO.ArquivoId == 0)
             {
-                return BadRequest("necessário informar o arquivo e a cidade");
+                return BadRequest(new { error = "necessário informar o arquivo e a cidade" });
             }
 
             var result = await _lugarService.UpdateLugar(id, editarLugarDTO);
