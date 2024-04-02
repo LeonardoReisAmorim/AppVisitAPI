@@ -61,7 +61,7 @@ namespace AppVisitAPI.Controllers
             
             if (!file.FileName.Contains(".zip"))
             {
-                return BadRequest("Somente arquivos .zip são importados");
+                return BadRequest(new { error = "Somente arquivos .zip são importados. Por favor tente novamente" });
             }
 
             var inserirArquivoDTO = JsonConvert.DeserializeObject<InserirArquivoDTO>(Request.Form.FirstOrDefault().Value);
