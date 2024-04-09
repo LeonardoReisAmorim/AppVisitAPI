@@ -17,7 +17,9 @@ namespace AppVisitAPI.DTOs.LugarDTO
         public int CidadeId { get; set; }
 
         [Required]
-        //Base64
         public string Imagem { get; set; }
+
+        [Required]
+        public string InstrucoesUtilizacaoVR { get; set; }
     }
 }

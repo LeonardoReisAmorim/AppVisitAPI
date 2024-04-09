@@ -1,5 +1,4 @@
 ﻿using AppVisitAPI.DTOs.LugarDTO;
-using AppVisitAPI.Models;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 

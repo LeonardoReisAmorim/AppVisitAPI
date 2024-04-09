@@ -18,5 +18,8 @@ namespace AppVisitAPI.DTOs.LugarDTO
 
         [Required]
         public string Imagem { get; set; }
+
+        [Required]
+        public string InstrucoesUtilizacaoVR { get; set; }
     }
 }

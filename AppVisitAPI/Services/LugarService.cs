@@ -53,6 +53,7 @@ namespace AppVisitAPI.Services
                                                                Nome = lugar.Nome,
                                                                NomeArquivo = lugar.Arquivo.NomeArquivo,
                                                                CidadeId = lugar.CidadeId,
+                                                               InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
                                                            })
                                                            .ToListAsync());
             }
@@ -72,6 +73,7 @@ namespace AppVisitAPI.Services
                                                                Nome = lugar.Nome,
                                                                NomeArquivo = lugar.Arquivo.NomeArquivo,
                                                                CidadeId = lugar.CidadeId,
+                                                               InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
                                                             })
                                                             .ToListAsync());
             }

@@ -10,5 +10,6 @@
         public string Imagem { get; set; }
         public string Cidade { get; set; }
         public string NomeArquivo { get; set; }
+        public string InstrucoesUtilizacaoVR { get; set; }
     }
 }
