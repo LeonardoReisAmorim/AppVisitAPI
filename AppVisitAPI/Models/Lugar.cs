@@ -30,5 +30,8 @@ namespace AppVisitAPI.Models
 
         [JsonIgnore]
         public virtual Cidade Cidade { get; set; }
+
+        [Required]
+        public string InstrucoesUtilizacaoVR { get; set; }
     }
 }
