@@ -8,7 +8,7 @@ namespace AppVisitAPI.Controllers
     [ApiController]
     public class LugarController : ControllerBase
     {
-        private LugarService _lugarService;
+        private readonly LugarService _lugarService;
         
         public LugarController(LugarService lugarService)
         {
@@ -33,6 +33,19 @@ namespace AppVisitAPI.Controllers
             }
 
             return Ok(lugar);
+        }
+
+        [HttpGet("utilizationPlaceVR/{id}")]
+        public async Task<ActionResult> GetUtilizacaoLugarVRById(int id)
+        {
+            var utilizacaoLugarVR = await _lugarService.GetUtilizacaoLugarVRById(id);
+
+            if (String.IsNullOrEmpty(utilizacaoLugarVR))
+            {
+                return NotFound();
+            }
+
+            return Ok(utilizacaoLugarVR);
         }
 
         [HttpPost]

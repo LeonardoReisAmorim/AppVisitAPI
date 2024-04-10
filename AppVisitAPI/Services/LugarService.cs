@@ -81,6 +81,22 @@ namespace AppVisitAPI.Services
             return lugaresDTO;
         }
 
+        public async Task<string?> GetUtilizacaoLugarVRById(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+
+            var infoUtilizacaoVR = await _context.Lugares
+                                         .AsNoTracking()
+                                         .Where(lugar => lugar.Id == id)
+                                         .Select(lugar => lugar.InstrucoesUtilizacaoVR)
+                                         .SingleOrDefaultAsync();
+
+            return infoUtilizacaoVR;
+        }
+
         public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
         {
             var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
