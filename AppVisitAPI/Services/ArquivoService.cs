@@ -2,7 +2,6 @@
 using AppVisitAPI.DTOs.ArquivoDTO;
 using AppVisitAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AppVisitAPI.Services
 {
@@ -17,35 +16,27 @@ namespace AppVisitAPI.Services
 
         public byte[] GetArquivoById(int id)
         {
-            var arquivo = _context.Arquivos.AsNoTracking().Where(x => x.Id == id).Select(x => x.ArquivoConteudo).First();
-
-            return arquivo;
+            return _context.Arquivos.AsNoTracking().FirstOrDefault(x => x.Id == id).ArquivoConteudo;
         }
 
         public async Task<IEnumerable<LerDadosArquivoDTO>> GetDadosArquivo(int? id = null)
         {
-            var dadosArquivo = new List<LerDadosArquivoDTO>();
-
             if(id.HasValue)
             {
-                dadosArquivo = await _context.Arquivos.AsNoTracking().Where(a => a.Id == id).Select(a => new LerDadosArquivoDTO
+                return await _context.Arquivos.AsNoTracking().Where(a => a.Id == id).Select(a => new LerDadosArquivoDTO
                 {
                     Id = a.Id,
                     NomeArquivo = a.NomeArquivo,
                     DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
                 }).ToListAsync();
             }
-            else
+            
+            return await _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
             {
-                dadosArquivo = await _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
-                {
-                    Id = a.Id,
-                    NomeArquivo = a.NomeArquivo,
-                    DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
-                }).ToListAsync();
-            }
-
-            return dadosArquivo;
+                Id = a.Id,
+                NomeArquivo = a.NomeArquivo,
+                DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
+            }).ToListAsync();
         }
 
         public LerArquivoDTO CreateArquivo(byte[] arquivoDTO, InserirArquivoDTO arquivodados)
@@ -72,7 +63,7 @@ namespace AppVisitAPI.Services
         {
             var arquivo = _context.Arquivos.AsNoTracking().SingleOrDefault(arquivo => arquivo.Id == id);
 
-            if (arquivo == null)
+            if (arquivo is null)
             {
                 return false;
             }
@@ -89,7 +80,7 @@ namespace AppVisitAPI.Services
         {
             var arquivo = _context.Arquivos.AsNoTracking().SingleOrDefault(arquivo => arquivo.Id == id);
 
-            if (arquivo == null)
+            if (arquivo is null)
             {
                 return false;
             }

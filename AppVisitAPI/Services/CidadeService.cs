@@ -19,61 +19,49 @@ namespace AppVisitAPI.Services
 
         public async Task<LerCidadeDTO> CreateCidade(CriarCidadeDTO cidadeDTO)
         {
-            try
-            {
-                Cidade cidade = _mapper.Map<Cidade>(cidadeDTO);
-                await _context.Cidades.AddAsync(cidade);
-                _context.SaveChanges();
-                return _mapper.Map<LerCidadeDTO>(cidade);
-            }
-            catch
-            {
-                return null;
-            }
+            Cidade cidade = _mapper.Map<Cidade>(cidadeDTO);
+            await _context.Cidades.AddAsync(cidade);
+            _context.SaveChanges();
+            return _mapper.Map<LerCidadeDTO>(cidade);
         }
 
         public async Task<List<LerCidadeDTO>> GetCidade(int? id = null)
         {
-            var cidadesDTO = new List<LerCidadeDTO>();
-
             if (id.HasValue)
             {
-                cidadesDTO = _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.AsNoTracking().Where(cidade => cidade.Id == id).ToListAsync());
-            }
-            else
-            {
-                cidadesDTO = _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.AsNoTracking().ToListAsync());
+                return _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.AsNoTracking().Where(cidade => cidade.Id == id).ToListAsync());
             }
 
-            return cidadesDTO;
+            return _mapper.Map<List<LerCidadeDTO>>(await _context.Cidades.AsNoTracking().ToListAsync());
         }
 
         public async Task<bool> UpdateCidade(int id, EditarCidadeDTO updateCidadeDTO)
         {
             var cidade = await _context.Cidades.AsNoTracking().FirstOrDefaultAsync(cidade => cidade.Id == id);
 
-            if (cidade != null)
+            if (cidade is null)
             {
-                _mapper.Map(updateCidadeDTO, cidade);
-                _context.SaveChanges();
-                return true;
+                return false;
             }
 
-            return false;
+            _mapper.Map(updateCidadeDTO, cidade);
+            _context.Entry(cidade).State = EntityState.Modified;
+            _context.SaveChanges();
+            return true;
         }
 
         public async Task<bool> DeleteCidade(int id)
         {
             var cidade = await _context.Cidades.AsNoTracking().FirstOrDefaultAsync(cidade => cidade.Id == id);
 
-            if (cidade != null)
+            if (cidade is null)
             {
-                _context.Remove(cidade);
-                _context.SaveChanges();
-                return true;
+                return false;
             }
 
-            return false;
+            _context.Remove(cidade);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

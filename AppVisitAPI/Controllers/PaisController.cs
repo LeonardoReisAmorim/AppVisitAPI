@@ -1,5 +1,4 @@
 ﻿using AppVisitAPI.DTOs.PaisDTO;
-using AppVisitAPI.Models;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 

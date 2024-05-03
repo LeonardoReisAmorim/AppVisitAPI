@@ -19,26 +19,17 @@ namespace AppVisitAPI.Services
 
         public async Task<LerLugarDTO> CreateLugar(InserirLugarDTO lugarDTO)
         {
-            try
-            {
-                Lugar lugar = _mapper.Map<Lugar>(lugarDTO);
-                await _context.Lugares.AddAsync(lugar);
-                _context.SaveChanges();
-                return _mapper.Map<LerLugarDTO>(lugar);
-            }
-            catch(Exception ex)
-            {
-                return null;
-            }
+            Lugar lugar = _mapper.Map<Lugar>(lugarDTO);
+            await _context.Lugares.AddAsync(lugar);
+            _context.SaveChanges();
+            return _mapper.Map<LerLugarDTO>(lugar);
         }
 
         public async Task<List<LerLugarDTO>> GetLugar(int? id = null)
         {
-            var lugaresDTO = new List<LerLugarDTO>();
-
             if (id.HasValue)
             {
-                lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+                return _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
                                                            .AsNoTracking()
                                                            .Where(lugar => lugar.Id == id)
                                                            .Include(lugar => lugar.Arquivo)
@@ -57,28 +48,24 @@ namespace AppVisitAPI.Services
                                                            })
                                                            .ToListAsync());
             }
-            else
-            {
-                lugaresDTO = _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+
+            return _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
                                                             .AsNoTracking()
                                                             .Include(lugar => lugar.Arquivo)
                                                             .Include(lugar => lugar.Cidade)
                                                             .Select(lugar => new LerLugarDTO
                                                             {
-                                                               ArquivoId = lugar.ArquivoId,
-                                                               Cidade = lugar.Cidade.Nome,
-                                                               Descricao = lugar.Descricao,
-                                                               Id = lugar.Id,
-                                                               Imagem = Convert.ToBase64String(lugar.Imagem),
-                                                               Nome = lugar.Nome,
-                                                               NomeArquivo = lugar.Arquivo.NomeArquivo,
-                                                               CidadeId = lugar.CidadeId,
-                                                               InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
+                                                                ArquivoId = lugar.ArquivoId,
+                                                                Cidade = lugar.Cidade.Nome,
+                                                                Descricao = lugar.Descricao,
+                                                                Id = lugar.Id,
+                                                                Imagem = Convert.ToBase64String(lugar.Imagem),
+                                                                Nome = lugar.Nome,
+                                                                NomeArquivo = lugar.Arquivo.NomeArquivo,
+                                                                CidadeId = lugar.CidadeId,
+                                                                InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
                                                             })
                                                             .ToListAsync());
-            }
-
-            return lugaresDTO;
         }
 
         public async Task<string?> GetUtilizacaoLugarVRById(int id)
@@ -88,42 +75,40 @@ namespace AppVisitAPI.Services
                 return null;
             }
 
-            var infoUtilizacaoVR = await _context.Lugares
+            return await _context.Lugares
                                          .AsNoTracking()
                                          .Where(lugar => lugar.Id == id)
                                          .Select(lugar => lugar.InstrucoesUtilizacaoVR)
                                          .SingleOrDefaultAsync();
-
-            return infoUtilizacaoVR;
         }
 
         public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
         {
             var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
 
-            if (lugar != null)
+            if (lugar is null)
             {
-                _mapper.Map(updateLugarDTO, lugar);
-                _context.Entry(lugar).State = EntityState.Modified;
-                _context.SaveChanges();
-                return true;
+                return false;
             }
 
-            return false;
+            _mapper.Map(updateLugarDTO, lugar);
+            _context.Entry(lugar).State = EntityState.Modified;
+            _context.SaveChanges();
+            return true;
         }
 
         public async Task<bool> DeleteLugar(int id)
         {
             var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
 
-            if (lugar != null)
+            if (lugar is null)
             {
-                _context.Remove(lugar);
-                _context.SaveChanges();
-                return true;
+                return false;
             }
 
-            return false;
+            _context.Remove(lugar);
+            _context.SaveChanges();
+            return true;
         }
     }
 }
