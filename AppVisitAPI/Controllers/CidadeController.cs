@@ -1,5 +1,5 @@
 ﻿using AppVisitAPI.DTOs.CidadeDTO;
-using AppVisitAPI.Services;
+using AppVisitAPI.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
@@ -8,23 +8,23 @@ namespace AppVisitAPI.Controllers
     [ApiController]
     public class CidadeController : ControllerBase
     {
-        private readonly CidadeService _cidadeService;
-        public CidadeController(CidadeService cidade)
+        private readonly ICidadeService _iCidadeService;
+        public CidadeController(ICidadeService iCidadeService)
         {
-            _cidadeService = cidade;
+            _iCidadeService = iCidadeService;
         }
 
         [HttpGet]
         public async Task<ActionResult> GetCidades()
         {
-            var cidades = await _cidadeService.GetCidade();
+            var cidades = await _iCidadeService.GetCidade();
             return Ok(cidades);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetCidadeById(int id)
         {
-            var cidade = await _cidadeService.GetCidade(id);
+            var cidade = await _iCidadeService.GetCidade(id);
 
             if (cidade is null || !cidade.Any())
             {
@@ -37,7 +37,7 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCidade([FromBody] CriarCidadeDTO cidadeDTO)
         {
-            var cidadeCriada = await _cidadeService.CreateCidade(cidadeDTO);
+            var cidadeCriada = await _iCidadeService.CreateCidade(cidadeDTO);
 
             return CreatedAtAction(nameof(GetCidadeById), new { cidadeCriada.Id }, cidadeCriada);
         }
@@ -45,7 +45,7 @@ namespace AppVisitAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditCidade(int id, [FromBody] EditarCidadeDTO editarCidadeDTO)
         {
-            var result = await _cidadeService.UpdateCidade(id, editarCidadeDTO);
+            var result = await _iCidadeService.UpdateCidade(id, editarCidadeDTO);
 
             if (result)
             {
@@ -58,7 +58,7 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCidade(int id)
         {
-            var result = await _cidadeService.DeleteCidade(id);
+            var result = await _iCidadeService.DeleteCidade(id);
 
             if (result)
             {

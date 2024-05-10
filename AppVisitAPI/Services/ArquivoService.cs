@@ -1,42 +1,34 @@
-﻿using AppVisitAPI.Data.Context;
-using AppVisitAPI.DTOs.ArquivoDTO;
+﻿using AppVisitAPI.DTOs.ArquivoDTO;
+using AppVisitAPI.Interfaces.Repositories;
+using AppVisitAPI.Interfaces.Services;
 using AppVisitAPI.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace AppVisitAPI.Services
 {
-    public class ArquivoService
+    public class ArquivoService : IArquivoService
     {
-        private readonly Context _context;
+        private readonly IArquivoRepository _iArquivoRepository;
 
-        public ArquivoService(Context context)
+        public ArquivoService(IArquivoRepository iArquivoRepository)
         {
-            _context = context;
+            _iArquivoRepository = iArquivoRepository;
         }
 
         public byte[] GetArquivoById(int id)
         {
-            return _context.Arquivos.AsNoTracking().FirstOrDefault(x => x.Id == id).ArquivoConteudo;
+            return _iArquivoRepository.GetArquivoConteudoById(id) ?? throw new Exception();
         }
 
         public async Task<IEnumerable<LerDadosArquivoDTO>> GetDadosArquivo(int? id = null)
         {
-            if(id.HasValue)
-            {
-                return await _context.Arquivos.AsNoTracking().Where(a => a.Id == id).Select(a => new LerDadosArquivoDTO
-                {
-                    Id = a.Id,
-                    NomeArquivo = a.NomeArquivo,
-                    DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
-                }).ToListAsync();
-            }
-            
-            return await _context.Arquivos.AsNoTracking().Select(a => new LerDadosArquivoDTO
+            var arquivoModel = await _iArquivoRepository.GetDadosArquivo(id);
+
+            return arquivoModel.Select(a => new LerDadosArquivoDTO
             {
                 Id = a.Id,
                 NomeArquivo = a.NomeArquivo,
                 DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
-            }).ToListAsync();
+            });
         }
 
         public LerArquivoDTO CreateArquivo(byte[] arquivoDTO, InserirArquivoDTO arquivodados)
@@ -47,48 +39,30 @@ namespace AppVisitAPI.Services
                 NomeArquivo = arquivodados.NomeArquivo,
                 DataCriacao = arquivodados.DataCriacao
             };
+            var arquivoCriado = _iArquivoRepository.Create(arquivo);
 
-            _context.Arquivos.Add(arquivo);
-            _context.SaveChanges();
-
-            var lerArquivo = new LerArquivoDTO
+            return new LerArquivoDTO
             {
-                Id = arquivo.Id
+                Id = arquivoCriado.Id
             };
-
-            return lerArquivo;
         }
 
         public bool UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            var arquivo = _context.Arquivos.AsNoTracking().SingleOrDefault(arquivo => arquivo.Id == id);
-
-            if (arquivo is null)
+            var arquivoModel = new Arquivo
             {
-                return false;
-            }
+                ArquivoConteudo = editarArquivoDTO.Arquivo,
+                DataCriacao = editarArquivoDTO.DataCriacao,
+                NomeArquivo = editarArquivoDTO.NomeArquivo,
+                Id = id
+            };
 
-            arquivo.ArquivoConteudo = editarArquivoDTO.Arquivo;
-            arquivo.NomeArquivo = editarArquivoDTO.NomeArquivo;
-            _context.Entry(arquivo).State = EntityState.Modified;
-            _context.SaveChanges();
-
-            return true;
+            return _iArquivoRepository.Update(arquivoModel);
         }
 
         public bool DeleteArquivo(int id)
         {
-            var arquivo = _context.Arquivos.AsNoTracking().SingleOrDefault(arquivo => arquivo.Id == id);
-
-            if (arquivo is null)
-            {
-                return false;
-            }
-
-            _context.Remove(arquivo);
-            _context.SaveChanges();
-            
-            return true;
+            return _iArquivoRepository.Delete(id);
         }
     }
 }
