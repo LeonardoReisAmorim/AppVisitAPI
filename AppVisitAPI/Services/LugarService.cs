@@ -1,62 +1,114 @@
-﻿using AppVisitAPI.DTOs.LugarDTO;
-using AppVisitAPI.Interfaces.Repositories;
-using AppVisitAPI.Interfaces.Services;
+﻿using AppVisitAPI.Data.Context;
+using AppVisitAPI.DTOs.LugarDTO;
 using AppVisitAPI.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppVisitAPI.Services
 {
-    public class LugarService : ILugarService
+    public class LugarService
     {
+        private readonly Context _context;
         private readonly IMapper _mapper;
-        private readonly ILugarRepository _iLugarRepository;
 
-        public LugarService(IMapper mapper, ILugarRepository iLugarRepository)
+        public LugarService(Context context, IMapper mapper)
         {
+            _context = context;
             _mapper = mapper;
-            _iLugarRepository = iLugarRepository;
         }
 
         public async Task<LerLugarDTO> CreateLugar(InserirLugarDTO lugarDTO)
         {
             Lugar lugar = _mapper.Map<Lugar>(lugarDTO);
-            var lugarCriado = await _iLugarRepository.Create(lugar);
-            return _mapper.Map<LerLugarDTO>(lugarCriado);
+            await _context.Lugares.AddAsync(lugar);
+            _context.SaveChanges();
+            return _mapper.Map<LerLugarDTO>(lugar);
         }
 
         public async Task<List<LerLugarDTO>> GetLugar(int? id = null)
         {
-            var lugares = await _iLugarRepository.Get(id);
-            
-            return _mapper.Map<List<LerLugarDTO>>(lugares.Select(lugar => new LerLugarDTO
+            if (id.HasValue)
             {
-                ArquivoId = lugar.ArquivoId,
-                Cidade = lugar.Cidade.Nome,
-                Descricao = lugar.Descricao,
-                Id = lugar.Id,
-                Imagem = Convert.ToBase64String(lugar.Imagem),
-                Nome = lugar.Nome,
-                NomeArquivo = lugar.Arquivo.NomeArquivo,
-                CidadeId = lugar.CidadeId,
-                InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
-            }));
+                return _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+                                                           .AsNoTracking()
+                                                           .Where(lugar => lugar.Id == id)
+                                                           .Include(lugar => lugar.Arquivo)
+                                                           .Include(lugar => lugar.Cidade)
+                                                           .Select(lugar => new LerLugarDTO
+                                                           {
+                                                               ArquivoId = lugar.ArquivoId,
+                                                               Cidade = lugar.Cidade.Nome,
+                                                               Descricao = lugar.Descricao,
+                                                               Id = lugar.Id,
+                                                               Imagem = Convert.ToBase64String(lugar.Imagem),
+                                                               Nome = lugar.Nome,
+                                                               NomeArquivo = lugar.Arquivo.NomeArquivo,
+                                                               CidadeId = lugar.CidadeId,
+                                                               InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
+                                                           })
+                                                           .ToListAsync());
+            }
+
+            return _mapper.Map<List<LerLugarDTO>>(await _context.Lugares
+                                                            .AsNoTracking()
+                                                            .Include(lugar => lugar.Arquivo)
+                                                            .Include(lugar => lugar.Cidade)
+                                                            .Select(lugar => new LerLugarDTO
+                                                            {
+                                                                ArquivoId = lugar.ArquivoId,
+                                                                Cidade = lugar.Cidade.Nome,
+                                                                Descricao = lugar.Descricao,
+                                                                Id = lugar.Id,
+                                                                Imagem = Convert.ToBase64String(lugar.Imagem),
+                                                                Nome = lugar.Nome,
+                                                                NomeArquivo = lugar.Arquivo.NomeArquivo,
+                                                                CidadeId = lugar.CidadeId,
+                                                                InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
+                                                            })
+                                                            .ToListAsync());
         }
 
         public async Task<string?> GetUtilizacaoLugarVRById(int id)
         {
-            return await _iLugarRepository.GetInstrucaoUtilizarVRById(id);
+            if (id == 0)
+            {
+                return null;
+            }
+
+            return await _context.Lugares
+                                         .AsNoTracking()
+                                         .Where(lugar => lugar.Id == id)
+                                         .Select(lugar => lugar.InstrucoesUtilizacaoVR)
+                                         .SingleOrDefaultAsync();
         }
 
         public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
         {
-            var lugar = _mapper.Map<Lugar>(updateLugarDTO);
-            lugar.Id = id;
-            return await _iLugarRepository.Update(lugar);
+            var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
+
+            if (lugar is null)
+            {
+                return false;
+            }
+
+            _mapper.Map(updateLugarDTO, lugar);
+            _context.Entry(lugar).State = EntityState.Modified;
+            _context.SaveChanges();
+            return true;
         }
 
         public async Task<bool> DeleteLugar(int id)
         {
-            return await _iLugarRepository.Delete(id);
+            var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
+
+            if (lugar is null)
+            {
+                return false;
+            }
+
+            _context.Remove(lugar);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AppVisitAPI.DTOs.LugarDTO;
-using AppVisitAPI.Interfaces.Services;
+using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
@@ -8,24 +8,24 @@ namespace AppVisitAPI.Controllers
     [ApiController]
     public class LugarController : ControllerBase
     {
-        private readonly ILugarService _ILugarService;
+        private readonly LugarService _lugarService;
         
-        public LugarController(ILugarService iLugarService)
+        public LugarController(LugarService lugarService)
         {
-            _ILugarService = iLugarService;
+            _lugarService = lugarService;
         }
 
         [HttpGet]
         public async Task<ActionResult> GetLugares()
         {
-            var lugares = await _ILugarService.GetLugar();
+            var lugares = await _lugarService.GetLugar();
             return Ok(lugares);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetLugarById(int id)
         {
-            var lugar = await _ILugarService.GetLugar(id);
+            var lugar = await _lugarService.GetLugar(id);
 
             if (lugar is null || !lugar.Any())
             {
@@ -38,7 +38,7 @@ namespace AppVisitAPI.Controllers
         [HttpGet("utilizationPlaceVR/{id}")]
         public async Task<ActionResult> GetUtilizacaoLugarVRById(int id)
         {
-            var utilizacaoLugarVR = await _ILugarService.GetUtilizacaoLugarVRById(id);
+            var utilizacaoLugarVR = await _lugarService.GetUtilizacaoLugarVRById(id);
 
             if (String.IsNullOrEmpty(utilizacaoLugarVR))
             {
@@ -56,7 +56,7 @@ namespace AppVisitAPI.Controllers
                 return BadRequest(new { error = "necessário informar o arquivo e a cidade" });
             }
 
-            var lugarCriado = await _ILugarService.CreateLugar(lugarDTO);
+            var lugarCriado = await _lugarService.CreateLugar(lugarDTO);
 
             return CreatedAtAction(nameof(GetLugarById), new { lugarCriado.Id }, lugarCriado);
         }
@@ -69,7 +69,7 @@ namespace AppVisitAPI.Controllers
                 return BadRequest(new { error = "necessário informar o arquivo e a cidade" });
             }
 
-            var result = await _ILugarService.UpdateLugar(id, editarLugarDTO);
+            var result = await _lugarService.UpdateLugar(id, editarLugarDTO);
             
             if (result)
             {
@@ -82,7 +82,7 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteLugar(int id)
         {
-            var result = await _ILugarService.DeleteLugar(id);
+            var result = await _lugarService.DeleteLugar(id);
             
             if (result)
             {

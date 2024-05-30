@@ -1,7 +1,4 @@
 using AppVisitAPI.Data.Context;
-using AppVisitAPI.Interfaces.Repositories;
-using AppVisitAPI.Interfaces.Services;
-using AppVisitAPI.Repositories;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -19,16 +16,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Context>(x => x.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnection")));
 //builder.Services.AddDbContext<Context>(x => x.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IPaisService, PaisService>();
-builder.Services.AddScoped<IEstadoService, EstadoService>();
-builder.Services.AddScoped<ICidadeService, CidadeService>();
-builder.Services.AddScoped<ILugarService, LugarService>();
-builder.Services.AddScoped<IArquivoService, ArquivoService>();
-builder.Services.AddScoped<IPaisRepository, PaisRepository>();
-builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
-builder.Services.AddScoped<ICidadeRepository, CidadeRepository>();
-builder.Services.AddScoped<ILugarRepository, LugarRepository>();
-builder.Services.AddScoped<IArquivoRepository, ArquivoRepository>();
+builder.Services.AddScoped<PaisService, PaisService>();
+builder.Services.AddScoped<EstadoService, EstadoService>();
+builder.Services.AddScoped<CidadeService, CidadeService>();
+builder.Services.AddScoped<LugarService, LugarService>();
+builder.Services.AddScoped<ArquivoService, ArquivoService>();
 
 builder.Services.Configure<KestrelServerOptions>(options =>
 {

@@ -1,5 +1,5 @@
 ﻿using AppVisitAPI.DTOs.EstadoDTO;
-using AppVisitAPI.Interfaces.Services;
+using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
@@ -8,23 +8,23 @@ namespace AppVisitAPI.Controllers
     [Route("[controller]")]
     public class EstadoController : ControllerBase
     {
-        private readonly IEstadoService _iEstadoService;
-        public EstadoController(IEstadoService iEstadoService)
+        private readonly EstadoService _estadoService;
+        public EstadoController(EstadoService estadoService)
         {
-            _iEstadoService = iEstadoService;
+            _estadoService = estadoService;
         }
 
         [HttpGet]
         public async Task<ActionResult> GetEstados()
         {
-            var estados = await _iEstadoService.GetEstado();
+            var estados = await _estadoService.GetEstado();
             return Ok(estados);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetEstadoById(int id)
         {
-            var estado = await _iEstadoService.GetEstado(id);
+            var estado = await _estadoService.GetEstado(id);
 
             if (estado is null || !estado.Any())
             {
@@ -37,7 +37,7 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateEstado([FromBody] CriarEstadoDTO estadoDTO)
         {
-            var estadoCriado = await _iEstadoService.CreateEstado(estadoDTO);
+            var estadoCriado = await _estadoService.CreateEstado(estadoDTO);
 
             return CreatedAtAction(nameof(GetEstadoById), new { estadoCriado.Id }, estadoCriado);
         }
@@ -45,7 +45,7 @@ namespace AppVisitAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditEstado(int id, [FromBody] EditarEstadoDTO editarEstadoDTO)
         {
-            var result = await _iEstadoService.UpdateEstado(id, editarEstadoDTO);
+            var result = await _estadoService.UpdateEstado(id, editarEstadoDTO);
 
             if (result)
             {
@@ -58,7 +58,7 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEstado(int id)
         {
-            var result = await _iEstadoService.DeleteEstado(id);
+            var result = await _estadoService.DeleteEstado(id);
 
             if (result)
             {
