@@ -59,9 +59,9 @@ namespace AppVisitAPI.Controllers
             var file = Request.Form.Files[0];
             var lerArquivo = new LerArquivoDTO();
             
-            if (!file.FileName.Contains(".zip"))
+            if (!file.FileName.Contains(".zip") && !file.FileName.Contains(".rar"))
             {
-                return BadRequest(new { error = "Somente arquivos .zip são importados. Por favor tente novamente" });
+                return BadRequest(new { error = "Somente arquivos compactados são importados. Por favor tente novamente" });
             }
 
             var inserirArquivoDTO = JsonConvert.DeserializeObject<InserirArquivoDTO>(Request.Form.FirstOrDefault().Value);
@@ -84,9 +84,9 @@ namespace AppVisitAPI.Controllers
         {
             var file = Request.Form.Files[0];
 
-            if (!file.FileName.Contains(".zip"))
+            if (!file.FileName.Contains(".zip") && !file.FileName.Contains(".rar"))
             {
-                return BadRequest(new { error = "Somente arquivos .zip são importados. Por favor tente novamente" });
+                return BadRequest(new { error = "Somente arquivos compactados são importados. Por favor tente novamente" });
             }
 
             var EditarArquivoDTO = JsonConvert.DeserializeObject<EditarArquivo>(Request.Form.FirstOrDefault().Value);
