@@ -1,4 +1,5 @@
 ﻿using AppVisitAPI.DTOs.ArquivoDTO;
+using AppVisitAPI.Interfaces.Arquivo;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -9,16 +10,16 @@ namespace AppVisitAPI.Controllers
     [ApiController]
     public class ArquivoController : ControllerBase
     {
-        private readonly ArquivoService _arquivoService;
-        public ArquivoController(ArquivoService arquivoService)
+        private readonly IArquivoService _IArquivoService;
+        public ArquivoController(IArquivoService iarquivoService)
         {
-            _arquivoService = arquivoService;
+            _IArquivoService = iarquivoService;
         }
 
         [HttpGet("{id}")]
         public IActionResult GetArquivosById(int id)
         {
-            var arquivo = _arquivoService.GetArquivoById(id);
+            var arquivo = _IArquivoService.GetArquivoById(id);
 
             if (arquivo is null || !arquivo.Any())
             {
@@ -36,14 +37,14 @@ namespace AppVisitAPI.Controllers
         [HttpGet("dadosArquivos")]
         public async Task<IActionResult> GetDadosArquivos()
         {
-            var dadosarquivo = await _arquivoService.GetDadosArquivo();
+            var dadosarquivo = await _IArquivoService.GetDadosArquivo();
             return Ok(dadosarquivo);
         }
 
         [HttpGet("dadosArquivos/{id}")]
         public async Task<IActionResult> GetDadosArquivosById(int id)
         {
-            var dadosarquivo = await _arquivoService.GetDadosArquivo(id);
+            var dadosarquivo = await _IArquivoService.GetDadosArquivo(id);
 
             if (dadosarquivo is null || !dadosarquivo.Any())
             {
@@ -72,7 +73,7 @@ namespace AppVisitAPI.Controllers
                 {
                     file.CopyTo(Stream);
 
-                    lerArquivo = _arquivoService.CreateArquivo(Stream.ToArray(), inserirArquivoDTO);
+                    lerArquivo = _IArquivoService.CreateArquivo(Stream.ToArray(), inserirArquivoDTO);
                 }
             }
 
@@ -100,7 +101,7 @@ namespace AppVisitAPI.Controllers
                 }
             }
 
-            var result = _arquivoService.UpdateArquivo(id, EditarArquivoDTO);
+            var result = _IArquivoService.UpdateArquivo(id, EditarArquivoDTO);
 
             if (result)
             {
@@ -113,7 +114,7 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteArquivo(int id)
         {
-            var result = _arquivoService.DeleteArquivo(id);
+            var result = _IArquivoService.DeleteArquivo(id);
 
             if (result)
             {

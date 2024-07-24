@@ -1,68 +1,40 @@
-﻿using AppVisitAPI.Data.Context;
-using AppVisitAPI.DTOs.EstadoDTO;
+﻿using AppVisitAPI.DTOs.EstadoDTO;
+using AppVisitAPI.Interfaces.IEstado;
 using AppVisitAPI.Models;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace AppVisitAPI.Services
 {
-    public class EstadoService
+    public class EstadoService : IEstadoService
     {
-        private readonly Context _context;
+        private readonly IEstadoRepository _IEstadoRepository;
         private readonly IMapper _mapper;
 
-        public EstadoService(Context context, IMapper mapper)
+        public EstadoService(IEstadoRepository iestadoRepository, IMapper mapper)
         {
-            _context = context;
+            _IEstadoRepository = iestadoRepository;
             _mapper = mapper;
         }
 
         public async Task<LerEstadoDTO> CreateEstado(CriarEstadoDTO estadoDTO)
         {
             Estado estado = _mapper.Map<Estado>(estadoDTO);
-            await _context.Estados.AddAsync(estado);
-            _context.SaveChanges();
-            return _mapper.Map<LerEstadoDTO>(estado);
+            return _mapper.Map<LerEstadoDTO>(await _IEstadoRepository.CreateEstado(estado));
         }
 
         public async Task<List<LerEstadoDTO>> GetEstado(int? id = null)
         {
-            if (id.HasValue)
-            {
-                return _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.AsNoTracking().Where(estado => estado.Id == id).ToListAsync());
-            }
-
-            return _mapper.Map<List<LerEstadoDTO>>(await _context.Estados.AsNoTracking().ToListAsync());
-
+            return _mapper.Map<List<LerEstadoDTO>>(await _IEstadoRepository.GetEstado(id));
         }
 
         public async Task<bool> UpdateEstado(int id, EditarEstadoDTO updateEstadoDTO)
         {
-            var estado = await _context.Estados.AsNoTracking().FirstOrDefaultAsync(estado => estado.Id == id);
-
-            if (estado is null)
-            {
-                return false;
-            }
-
-            _mapper.Map(updateEstadoDTO, estado);
-            _context.Entry(estado).State = EntityState.Modified;
-            _context.SaveChanges();
-            return true;
+            return await _IEstadoRepository.UpdateEstado(id, updateEstadoDTO);
         }
 
         public async Task<bool> DeleteEstado(int id)
         {
-            var estado = await _context.Estados.AsNoTracking().FirstOrDefaultAsync(estado => estado.Id == id);
-
-            if (estado is null)
-            {
-                return false;
-            }
-
-            _context.Remove(estado);
-            _context.SaveChanges();
-            return true;
+            return await _IEstadoRepository.DeleteEstado(id);
         }
     }
 }
