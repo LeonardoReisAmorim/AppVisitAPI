@@ -18,6 +18,10 @@ namespace AppVisitAPI.Services
 
         public async Task<LerLugarDTO> CreateLugar(InserirLugarDTO lugarDTO)
         {
+            if(await _ILugarRepository.ExistsArquivo(lugarDTO.ArquivoId))
+            {
+                throw new Exception("Já existe um ambiente virtual vinculado a este lugar");
+            }
             Lugar lugar = _mapper.Map<Lugar>(lugarDTO);
             return _mapper.Map<LerLugarDTO>(await _ILugarRepository.CreateLugar(lugar));
         }
@@ -47,6 +51,10 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
         {
+            if (await _ILugarRepository.ExistsArquivo(updateLugarDTO.ArquivoId))
+            {
+                throw new Exception("Já existe um ambiente virtual vinculado a este lugar");
+            }
             return await _ILugarRepository.UpdateLugar(id, updateLugarDTO);
         }
 

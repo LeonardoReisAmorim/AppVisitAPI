@@ -9,6 +9,5 @@ namespace AppVisitAPI.Interfaces.Arquivo
         LerArquivoDTO CreateArquivo(byte[] arquivoDTO, InserirArquivoDTO arquivodados);
         bool UpdateArquivo(int id, EditarArquivo editarArquivoDTO);
         bool DeleteArquivo(int id);
-        bool ExistsArquivo(int id);
     }
 }

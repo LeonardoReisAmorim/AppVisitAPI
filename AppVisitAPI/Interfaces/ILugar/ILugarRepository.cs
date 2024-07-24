@@ -10,5 +10,6 @@ namespace AppVisitAPI.Interfaces.ILugar
         Task<string?> GetUtilizacaoLugarVRById(int id);
         Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO);
         Task<bool> DeleteLugar(int id);
+        Task<bool> ExistsArquivo(int arquivoId);
     }
 }

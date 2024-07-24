@@ -88,5 +88,10 @@ namespace AppVisitAPI.Repositories
             _context.SaveChanges();
             return true;
         }
+
+        public async Task<bool> ExistsArquivo(int arquivoId)
+        {
+            return await _context.Lugares.AnyAsync(lugar => lugar.ArquivoId == arquivoId);
+        }
     }
 }
