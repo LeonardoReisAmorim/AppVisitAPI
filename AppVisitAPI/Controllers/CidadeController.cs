@@ -1,6 +1,5 @@
 ﻿using AppVisitAPI.DTOs.CidadeDTO;
 using AppVisitAPI.Interfaces.ICidade;
-using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers

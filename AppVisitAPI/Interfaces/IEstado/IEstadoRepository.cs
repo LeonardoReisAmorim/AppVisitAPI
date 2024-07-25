@@ -1,5 +1,4 @@
-﻿using AppVisitAPI.DTOs.EstadoDTO;
-using AppVisitAPI.Models;
+﻿using AppVisitAPI.Models;
 
 namespace AppVisitAPI.Interfaces.IEstado
 {
@@ -7,7 +6,8 @@ namespace AppVisitAPI.Interfaces.IEstado
     {
         Task<Estado> CreateEstado(Estado estado);
         Task<List<Estado>> GetEstado(int? id = null);
-        Task<bool> UpdateEstado(int id, EditarEstadoDTO updateEstadoDTO);
-        Task<bool> DeleteEstado(int id);
+        Task<bool> UpdateEstado(int id, Estado estado);
+        Task<bool> DeleteEstado(Estado estado);
+        Task<Estado> GetEstadoById(int id);
     }
 }

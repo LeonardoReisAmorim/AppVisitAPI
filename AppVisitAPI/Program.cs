@@ -1,5 +1,5 @@
 using AppVisitAPI.Data.Context;
-using AppVisitAPI.Interfaces.Arquivo;
+using AppVisitAPI.Interfaces.IArquivo;
 using AppVisitAPI.Interfaces.ICidade;
 using AppVisitAPI.Interfaces.IEstado;
 using AppVisitAPI.Interfaces.ILugar;

@@ -1,6 +1,5 @@
 ﻿using AppVisitAPI.DTOs.ArquivoDTO;
-using AppVisitAPI.Interfaces.Arquivo;
-using AppVisitAPI.Services;
+using AppVisitAPI.Interfaces.IArquivo;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -55,7 +54,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateArquivo()
+        public async Task<IActionResult> CreateArquivo()
         {
             var file = Request.Form.Files[0];
             var lerArquivo = new LerArquivoDTO();
@@ -73,7 +72,7 @@ namespace AppVisitAPI.Controllers
                 {
                     file.CopyTo(Stream);
 
-                    lerArquivo = _IArquivoService.CreateArquivo(Stream.ToArray(), inserirArquivoDTO);
+                    lerArquivo = await _IArquivoService.CreateArquivoAsync(Stream.ToArray(), inserirArquivoDTO);
                 }
             }
 
@@ -81,7 +80,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateArquivo(int id)
+        public async Task<IActionResult> UpdateArquivo(int id)
         {
             var file = Request.Form.Files[0];
 
@@ -101,7 +100,7 @@ namespace AppVisitAPI.Controllers
                 }
             }
 
-            var result = _IArquivoService.UpdateArquivo(id, EditarArquivoDTO);
+            var result = await _IArquivoService.UpdateArquivo(id, EditarArquivoDTO);
 
             if (result)
             {
@@ -112,9 +111,9 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteArquivo(int id)
+        public async Task<IActionResult> DeleteArquivo(int id)
         {
-            var result = _IArquivoService.DeleteArquivo(id);
+            var result = await _IArquivoService.DeleteArquivo(id);
 
             if (result)
             {

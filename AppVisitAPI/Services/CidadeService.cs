@@ -29,12 +29,26 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateCidade(int id, EditarCidadeDTO updateCidadeDTO)
         {
-            return await _ICidadeRepository.UpdateCidade(id, updateCidadeDTO);
+            var cidade = await _ICidadeRepository.GetCidadeById(id);
+
+            if (cidade == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(updateCidadeDTO, cidade);
+            return await _ICidadeRepository.UpdateCidade(id, cidade);
         }
 
         public async Task<bool> DeleteCidade(int id)
         {
-            return await _ICidadeRepository.DeleteCidade(id);
+            var cidade = await _ICidadeRepository.GetCidadeById(id);
+
+            if (cidade is null)
+            {
+                return false;
+            }
+            return await _ICidadeRepository.DeleteCidade(cidade);
         }
     }
 }

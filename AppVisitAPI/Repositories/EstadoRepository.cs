@@ -1,5 +1,4 @@
 ﻿using AppVisitAPI.Data.Context;
-using AppVisitAPI.DTOs.EstadoDTO;
 using AppVisitAPI.Interfaces.IEstado;
 using AppVisitAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +17,7 @@ namespace AppVisitAPI.Repositories
         public async Task<Estado> CreateEstado(Estado estado)
         {
             await _context.Estados.AddAsync(estado);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return estado;
         }
 
@@ -33,36 +32,23 @@ namespace AppVisitAPI.Repositories
 
         }
 
-        public async Task<bool> UpdateEstado(int id, EditarEstadoDTO updateEstadoDTO)
+        public async Task<bool> UpdateEstado(int id, Estado estado)
         {
-            var estado = await _context.Estados.AsNoTracking().FirstOrDefaultAsync(estado => estado.Id == id);
-
-            if (estado is null)
-            {
-                return false;
-            }
-
-            estado.Id = id;
-            estado.Nome = updateEstadoDTO.Nome;
-            estado.PaisId = updateEstadoDTO.PaisId;
-
             _context.Entry(estado).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteEstado(int id)
+        public async Task<bool> DeleteEstado(Estado estado)
         {
-            var estado = await _context.Estados.AsNoTracking().FirstOrDefaultAsync(estado => estado.Id == id);
-
-            if (estado is null)
-            {
-                return false;
-            }
-
             _context.Remove(estado);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Estado> GetEstadoById(int id)
+        {
+            return await _context.Estados.AsNoTracking().FirstOrDefaultAsync(estado => estado.Id == id);
         }
     }
 }

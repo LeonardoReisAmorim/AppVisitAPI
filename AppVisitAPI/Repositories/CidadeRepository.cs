@@ -1,5 +1,4 @@
 ﻿using AppVisitAPI.Data.Context;
-using AppVisitAPI.DTOs.CidadeDTO;
 using AppVisitAPI.Interfaces.ICidade;
 using AppVisitAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +17,7 @@ namespace AppVisitAPI.Repositories
         public async Task<Cidade> CreateCidade(Cidade cidade)
         {
             await _context.Cidades.AddAsync(cidade);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return cidade;
         }
 
@@ -32,36 +31,23 @@ namespace AppVisitAPI.Repositories
             return await _context.Cidades.AsNoTracking().ToListAsync();
         }
 
-        public async Task<bool> UpdateCidade(int id, EditarCidadeDTO updateCidadeDTO)
+        public async Task<bool> UpdateCidade(int id, Cidade cidade)
         {
-            var cidade = await _context.Cidades.AsNoTracking().FirstOrDefaultAsync(cidade => cidade.Id == id);
-
-            if (cidade is null)
-            {
-                return false;
-            }
-
-            cidade.Id = id;
-            cidade.EstadoId = updateCidadeDTO.EstadoId;
-            cidade.Nome = updateCidadeDTO.Nome;
-
             _context.Entry(cidade).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteCidade(int id)
+        public async Task<bool> DeleteCidade(Cidade cidade)
         {
-            var cidade = await _context.Cidades.AsNoTracking().FirstOrDefaultAsync(cidade => cidade.Id == id);
-
-            if (cidade is null)
-            {
-                return false;
-            }
-
             _context.Remove(cidade);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Cidade> GetCidadeById(int id)
+        {
+            return await _context.Cidades.AsNoTracking().FirstOrDefaultAsync(cidade => cidade.Id == id);
         }
     }
 }

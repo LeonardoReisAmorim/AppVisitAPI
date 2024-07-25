@@ -55,12 +55,28 @@ namespace AppVisitAPI.Services
             {
                 throw new Exception("Já existe um ambiente virtual vinculado a este lugar");
             }
-            return await _ILugarRepository.UpdateLugar(id, updateLugarDTO);
+
+            var lugar = await _ILugarRepository.GetLugarById(id);
+
+            if (lugar is null)
+            {
+                return false;
+            }
+
+            _mapper.Map(updateLugarDTO, lugar);
+            return await _ILugarRepository.UpdateLugar(id, lugar);
         }
 
         public async Task<bool> DeleteLugar(int id)
         {
-            return await _ILugarRepository.DeleteLugar(id);
+            var lugar = await _ILugarRepository.GetLugarById(id);
+
+            if (lugar is null)
+            {
+                return false;
+            }
+
+            return await _ILugarRepository.DeleteLugar(lugar);
         }
     }
 }

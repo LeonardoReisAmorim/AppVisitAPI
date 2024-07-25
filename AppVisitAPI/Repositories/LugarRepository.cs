@@ -1,5 +1,4 @@
 ﻿using AppVisitAPI.Data.Context;
-using AppVisitAPI.DTOs.LugarDTO;
 using AppVisitAPI.Interfaces.ILugar;
 using AppVisitAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +17,14 @@ namespace AppVisitAPI.Repositories
         public async Task<Lugar> CreateLugar(Lugar lugar)
         {
             await _context.Lugares.AddAsync(lugar);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return lugar;
         }
 
         public async Task<List<Lugar>> GetLugar(int? id = null)
         {
             if (id.HasValue)
-            {
+            { 
                 return await _context.Lugares.AsNoTracking()
                              .Where(lugar => lugar.Id == id)
                              .Include(lugar => lugar.Arquivo)
@@ -47,51 +46,34 @@ namespace AppVisitAPI.Repositories
             }
 
             return await _context.Lugares
-                                         .AsNoTracking()
-                                         .Where(lugar => lugar.Id == id)
-                                         .Select(lugar => lugar.InstrucoesUtilizacaoVR)
-                                         .SingleOrDefaultAsync();
+                         .AsNoTracking()
+                         .Where(lugar => lugar.Id == id)
+                         .Select(lugar => lugar.InstrucoesUtilizacaoVR)
+                         .SingleOrDefaultAsync();
         }
 
-        public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
+        public async Task<bool> UpdateLugar(int id, Lugar lugar)
         {
-            var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
-
-            if (lugar is null)
-            {
-                return false;
-            }
-
-            lugar.Id = id;
-            lugar.Nome = updateLugarDTO.Nome;
-            lugar.Descricao = updateLugarDTO.Descricao;
-            lugar.ArquivoId = updateLugarDTO.ArquivoId;
-            lugar.CidadeId = updateLugarDTO.CidadeId;
-            lugar.Imagem = Convert.FromBase64String(updateLugarDTO.Imagem);
-            lugar.InstrucoesUtilizacaoVR = updateLugarDTO.InstrucoesUtilizacaoVR;
-
             _context.Entry(lugar).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteLugar(int id)
+        public async Task<bool> DeleteLugar(Lugar lugar)
         {
-            var lugar = await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
-
-            if (lugar is null)
-            {
-                return false;
-            }
-
             _context.Remove(lugar);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> ExistsArquivo(int arquivoId)
         {
             return await _context.Lugares.AnyAsync(lugar => lugar.ArquivoId == arquivoId);
+        }
+
+        public async Task<Lugar> GetLugarById(int id)
+        {
+            return await _context.Lugares.AsNoTracking().FirstOrDefaultAsync(lugar => lugar.Id == id);
         }
     }
 }

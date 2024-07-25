@@ -1,5 +1,4 @@
-﻿using AppVisitAPI.DTOs.LugarDTO;
-using AppVisitAPI.Models;
+﻿using AppVisitAPI.Models;
 
 namespace AppVisitAPI.Interfaces.ILugar
 {
@@ -8,8 +7,9 @@ namespace AppVisitAPI.Interfaces.ILugar
         Task<Lugar> CreateLugar(Lugar lugar);
         Task<List<Lugar>> GetLugar(int? id = null);
         Task<string?> GetUtilizacaoLugarVRById(int id);
-        Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO);
-        Task<bool> DeleteLugar(int id);
+        Task<bool> UpdateLugar(int id, Lugar lugar);
+        Task<bool> DeleteLugar(Lugar lugar);
         Task<bool> ExistsArquivo(int arquivoId);
+        Task<Lugar> GetLugarById(int id);
     }
 }

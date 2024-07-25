@@ -1,6 +1,5 @@
 ﻿using AppVisitAPI.DTOs.LugarDTO;
 using AppVisitAPI.Interfaces.ILugar;
-using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers

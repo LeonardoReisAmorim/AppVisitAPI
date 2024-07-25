@@ -1,5 +1,6 @@
 ﻿using AppVisitAPI.DTOs.ArquivoDTO;
-using AppVisitAPI.Interfaces.Arquivo;
+using AppVisitAPI.Interfaces.IArquivo;
+using AppVisitAPI.Models;
 
 namespace AppVisitAPI.Services
 {
@@ -14,28 +15,57 @@ namespace AppVisitAPI.Services
 
         public byte[] GetArquivoById(int id)
         {
-            return _IArquivoRepository.GetArquivoById(id);
+            return _IArquivoRepository.GetArquivoConteudoById(id);
         }
 
         public async Task<IEnumerable<LerDadosArquivoDTO>> GetDadosArquivo(int? id = null)
         {
-            return await _IArquivoRepository.GetDadosArquivo(id);
+            var result = await _IArquivoRepository.GetDadosArquivo(id);
+            return result.Select(a => new LerDadosArquivoDTO
+            {
+                Id = a.Id,
+                NomeArquivo = a.NomeArquivo,
+                DataCriacao = a.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
+            });
             
         }
 
-        public LerArquivoDTO CreateArquivo(byte[] arquivoDTO, InserirArquivoDTO arquivodados)
+        public async Task<LerArquivoDTO> CreateArquivoAsync(byte[] arquivoDTO, InserirArquivoDTO arquivodados)
         {
-            return _IArquivoRepository.CreateArquivo(arquivoDTO, arquivodados);
+            var arquivo = new Arquivo
+            {
+                ArquivoConteudo = arquivoDTO,
+                NomeArquivo = arquivodados.NomeArquivo,
+                DataCriacao = arquivodados.DataCriacao
+            };
+
+            var result = await _IArquivoRepository.CreateArquivo(arquivo);
+
+            return new LerArquivoDTO
+            {
+                Id = result.Id
+            };
         }
 
-        public bool UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
+        public async Task<bool> UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            return _IArquivoRepository.UpdateArquivo(id, editarArquivoDTO);
+            var arquivo = await _IArquivoRepository.GetArquivoById(id);
+
+            if (arquivo is null)
+            {
+                return false;
+            }
+
+            arquivo.ArquivoConteudo = editarArquivoDTO.Arquivo;
+            arquivo.NomeArquivo = editarArquivoDTO.NomeArquivo;
+
+            return await _IArquivoRepository.UpdateArquivo(id, arquivo);
         }
 
-        public bool DeleteArquivo(int id)
+        public async Task<bool> DeleteArquivo(int id)
         {
-            return _IArquivoRepository.DeleteArquivo(id);
+            var arquivo = await _IArquivoRepository.GetArquivoById(id);
+            return await _IArquivoRepository.DeleteArquivo(arquivo);
         }
     }
 }

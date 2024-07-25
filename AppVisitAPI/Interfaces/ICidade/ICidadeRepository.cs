@@ -1,5 +1,4 @@
-﻿using AppVisitAPI.DTOs.CidadeDTO;
-using AppVisitAPI.Models;
+﻿using AppVisitAPI.Models;
 
 namespace AppVisitAPI.Interfaces.ICidade
 {
@@ -7,7 +6,8 @@ namespace AppVisitAPI.Interfaces.ICidade
     {
         Task<Cidade> CreateCidade(Cidade cidade);
         Task<List<Cidade>> GetCidade(int? id = null);
-        Task<bool> UpdateCidade(int id, EditarCidadeDTO updateCidadeDTO);
-        Task<bool> DeleteCidade(int id);
+        Task<bool> UpdateCidade(int id, Cidade cidade);
+        Task<bool> DeleteCidade(Cidade cidade);
+        Task<Cidade> GetCidadeById(int id);
     }
 }
