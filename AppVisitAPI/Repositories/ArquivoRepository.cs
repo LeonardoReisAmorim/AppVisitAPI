@@ -23,10 +23,20 @@ namespace AppVisitAPI.Repositories
         {
             if (id.HasValue)
             {
-                return await _context.Arquivos.AsNoTracking().Where(a => a.Id == id).ToListAsync();
+                return await _context.Arquivos.AsNoTracking().Where(a => a.Id == id).Select(arquivo => new Arquivo
+                {
+                    DataCriacao = arquivo.DataCriacao,
+                    Id = arquivo.Id,
+                    NomeArquivo = arquivo.NomeArquivo,
+                }).ToListAsync();
             }
 
-            return await _context.Arquivos.AsNoTracking().ToListAsync();
+            return await _context.Arquivos.AsNoTracking().Select(arquivo => new Arquivo
+            {
+                DataCriacao = arquivo.DataCriacao,
+                Id = arquivo.Id,
+                NomeArquivo = arquivo.NomeArquivo,
+            }).ToListAsync();
         }
 
         public async Task<Arquivo> CreateArquivo(Arquivo arquivo)
@@ -50,9 +60,9 @@ namespace AppVisitAPI.Repositories
             return true;
         }
 
-        public async Task<Arquivo> GetArquivoById(int id)
+        public Arquivo GetArquivoById(int id)
         {
-            return await _context.Arquivos.AsNoTracking().SingleOrDefaultAsync(arquivo => arquivo.Id == id);
+            return _context.Arquivos.AsNoTracking().SingleOrDefault(arquivo => arquivo.Id == id);
         }
     }
 }

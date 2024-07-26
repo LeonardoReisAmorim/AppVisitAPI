@@ -49,7 +49,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            var arquivo = await _IArquivoRepository.GetArquivoById(id);
+            var arquivo = _IArquivoRepository.GetArquivoById(id);
 
             if (arquivo is null)
             {
@@ -64,7 +64,7 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> DeleteArquivo(int id)
         {
-            var arquivo = await _IArquivoRepository.GetArquivoById(id);
+            var arquivo = _IArquivoRepository.GetArquivoById(id);
             return await _IArquivoRepository.DeleteArquivo(arquivo);
         }
     }

@@ -9,6 +9,6 @@ namespace AppVisitAPI.Interfaces.IArquivo
         Task<Arquivo> CreateArquivo(Arquivo arquivo);
         Task<bool> UpdateArquivo(int id, Arquivo arquivo);
         Task<bool> DeleteArquivo(Arquivo arquivo);
-        Task<Arquivo> GetArquivoById(int id);
+        Arquivo GetArquivoById(int id);
     }
 }
