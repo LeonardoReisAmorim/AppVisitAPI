@@ -28,20 +28,7 @@ namespace AppVisitAPI.Services
 
         public async Task<List<LerLugarDTO>> GetLugar(int? id = null)
         {
-            var result = await _ILugarRepository.GetLugar(id);
-
-            return result.Select(lugar => new LerLugarDTO
-            {
-                ArquivoId = lugar.ArquivoId,
-                Cidade = lugar.Cidade.Nome,
-                Descricao = lugar.Descricao,
-                Id = lugar.Id,
-                Imagem = Convert.ToBase64String(lugar.Imagem),
-                Nome = lugar.Nome,
-                NomeArquivo = lugar.Arquivo.NomeArquivo,
-                CidadeId = lugar.CidadeId,
-                InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
-            }).ToList();
+            return await _ILugarRepository.GetLugar(id);
         }
 
         public async Task<string?> GetUtilizacaoLugarVRById(int id)
@@ -51,11 +38,6 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
         {
-            if (await _ILugarRepository.ExistsArquivo(updateLugarDTO.ArquivoId))
-            {
-                throw new Exception("Já existe um ambiente virtual vinculado a este lugar");
-            }
-
             var lugar = await _ILugarRepository.GetLugarById(id);
 
             if (lugar is null)

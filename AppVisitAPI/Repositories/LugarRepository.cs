@@ -1,4 +1,5 @@
 ﻿using AppVisitAPI.Data.Context;
+using AppVisitAPI.DTOs.LugarDTO;
 using AppVisitAPI.Interfaces.ILugar;
 using AppVisitAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace AppVisitAPI.Repositories
             return lugar;
         }
 
-        public async Task<List<Lugar>> GetLugar(int? id = null)
+        public async Task<List<LerLugarDTO>> GetLugar(int? id = null)
         {
             if (id.HasValue)
             { 
@@ -29,12 +30,36 @@ namespace AppVisitAPI.Repositories
                              .Where(lugar => lugar.Id == id)
                              .Include(lugar => lugar.Arquivo)
                              .Include(lugar => lugar.Cidade)
+                             .Select(lugar => new LerLugarDTO
+                             {
+                                 ArquivoId = lugar.ArquivoId,
+                                 Cidade = lugar.Cidade.Nome,
+                                 Descricao = lugar.Descricao,
+                                 Id = lugar.Id,
+                                 Imagem = Convert.ToBase64String(lugar.Imagem),
+                                 Nome = lugar.Nome,
+                                 NomeArquivo = lugar.Arquivo.NomeArquivo,
+                                 CidadeId = lugar.CidadeId,
+                                 InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
+                             })
                              .ToListAsync();
             }
 
             return await _context.Lugares.AsNoTracking()
                          .Include(lugar => lugar.Arquivo)
                          .Include(lugar => lugar.Cidade)
+                         .Select(lugar => new LerLugarDTO
+                         {
+                             ArquivoId = lugar.ArquivoId,
+                             Cidade = lugar.Cidade.Nome,
+                             Descricao = lugar.Descricao,
+                             Id = lugar.Id,
+                             Imagem = Convert.ToBase64String(lugar.Imagem),
+                             Nome = lugar.Nome,
+                             NomeArquivo = lugar.Arquivo.NomeArquivo,
+                             CidadeId = lugar.CidadeId,
+                             InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
+                         })
                          .ToListAsync();
         }
 
