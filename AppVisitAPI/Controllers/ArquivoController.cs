@@ -26,14 +26,11 @@ namespace AppVisitAPI.Controllers
                 return NotFound();
             }
 
-            using (var compressedStream = new MemoryStream())
+            var memoryStream = new MemoryStream(fileContent);
+            return new FileStreamResult(memoryStream, "application/zip")
             {
-                using (var gzipStream = new GZipStream(compressedStream, CompressionMode.Compress))
-                {
-                    gzipStream.Write(fileContent, 0, fileContent.Length);
-                }
-                return File(compressedStream.ToArray(), "application/octet-stream", "arquivo.zip.gz");
-            }
+                FileDownloadName = "arquivo.zip"
+            };
         }
 
         [HttpGet("dadosArquivos")]
