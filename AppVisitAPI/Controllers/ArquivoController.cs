@@ -2,6 +2,7 @@
 using AppVisitAPI.Interfaces.IArquivo;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IO.Compression;
 
 namespace AppVisitAPI.Controllers
 {
@@ -16,26 +17,23 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetArquivosById(int id, [FromQuery] int chunkNumber, [FromQuery] int chunkSize)
+        public IActionResult GetArquivosById(int id)
         {
-            var result = _IArquivoService.GetArquivoById(id);
+            var fileContent = _IArquivoService.GetArquivoById(id);
 
-            if (result is null || !result.Any())
+            if (fileContent == null || !fileContent.Any())
             {
                 return NotFound();
             }
 
-            int offset = chunkNumber * chunkSize;
-            if (offset >= result.Length)
+            using (var compressedStream = new MemoryStream())
             {
-                return NotFound();
+                using (var gzipStream = new GZipStream(compressedStream, CompressionMode.Compress))
+                {
+                    gzipStream.Write(fileContent, 0, fileContent.Length);
+                }
+                return File(compressedStream.ToArray(), "application/octet-stream", "arquivo.zip.gz");
             }
-
-            int length = Math.Min(chunkSize, result.Length - offset);
-            byte[] chunk = new byte[length];
-            Array.Copy(result, offset, chunk, 0, length);
-
-            return File(chunk, "application/zip", "arquivo.zip");
         }
 
         [HttpGet("dadosArquivos")]
