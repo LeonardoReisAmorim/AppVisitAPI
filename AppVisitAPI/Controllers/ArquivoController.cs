@@ -16,7 +16,7 @@ namespace AppVisitAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetArquivosById(int id)
+        public IActionResult GetArquivosById(int id, [FromQuery] int chunkNumber, [FromQuery] int chunkSize)
         {
             var result = _IArquivoService.GetArquivoById(id);
 
@@ -25,7 +25,17 @@ namespace AppVisitAPI.Controllers
                 return NotFound();
             }
 
-            return File(result, "application/zip", "arquivo.zip");
+            int offset = chunkNumber * chunkSize;
+            if (offset >= result.Length)
+            {
+                return NotFound();
+            }
+
+            int length = Math.Min(chunkSize, result.Length - offset);
+            byte[] chunk = new byte[length];
+            Array.Copy(result, offset, chunk, 0, length);
+
+            return File(chunk, "application/zip", "arquivo.zip");
         }
 
         [HttpGet("dadosArquivos")]
