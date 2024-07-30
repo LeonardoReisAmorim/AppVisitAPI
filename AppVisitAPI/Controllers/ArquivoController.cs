@@ -18,19 +18,14 @@ namespace AppVisitAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetArquivosById(int id)
         {
-            var arquivo = _IArquivoService.GetArquivoById(id);
+            var result = _IArquivoService.GetArquivoById(id);
 
-            if (arquivo is null || !arquivo.Any())
+            if (result is null || !result.Any())
             {
                 return NotFound();
             }
 
-            var result = new FileContentResult(arquivo, "application/zip")
-            {
-                FileDownloadName = "arquivo.zip"
-            };
-
-            return result;
+            return File(result, "application/zip", "arquivo.zip");
         }
 
         [HttpGet("dadosArquivos")]
