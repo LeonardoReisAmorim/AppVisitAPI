@@ -21,16 +21,7 @@ namespace AppVisitAPI.Controllers
         {
             var fileContent = _IArquivoService.GetArquivoById(id);
 
-            if (fileContent == null || !fileContent.Any())
-            {
-                return NotFound();
-            }
-
-            var memoryStream = new MemoryStream(fileContent);
-            return new FileStreamResult(memoryStream, "application/zip")
-            {
-                FileDownloadName = "arquivo.zip"
-            };
+            return File(fileContent, "application/zip", "arquivo.zip");
         }
 
         [HttpGet("dadosArquivos")]
