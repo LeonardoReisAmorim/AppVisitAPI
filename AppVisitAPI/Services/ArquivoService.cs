@@ -13,9 +13,10 @@ namespace AppVisitAPI.Services
             _IArquivoRepository = iarquivoRepository;
         }
 
-        public byte[] GetArquivoById(int id)
+        public Stream GetArquivoById(int id)
         {
-            return _IArquivoRepository.GetArquivoConteudoById(id);
+            var filebytes = _IArquivoRepository.GetArquivoConteudoById(id);
+            return new MemoryStream(filebytes);
         }
 
         public async Task<IEnumerable<LerDadosArquivoDTO>> GetDadosArquivo(int? id = null)

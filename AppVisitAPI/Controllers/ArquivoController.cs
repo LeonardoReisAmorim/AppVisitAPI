@@ -2,7 +2,6 @@
 using AppVisitAPI.Interfaces.IArquivo;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.IO.Compression;
 
 namespace AppVisitAPI.Controllers
 {
