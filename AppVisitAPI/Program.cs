@@ -7,6 +7,7 @@ using AppVisitAPI.Interfaces.IPais;
 using AppVisitAPI.Repositories;
 using AppVisitAPI.Services;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,6 +46,14 @@ builder.Services.Configure<FormOptions>(x =>
     x.MultipartHeadersLengthLimit = int.MaxValue;
 });
 
+// Adiciona a compressão de resposta
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true; // Ativa a compressão para conexões HTTPS
+    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/zip", "application/octet-stream" });
+});
+
 //services cors
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
@@ -59,6 +68,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Usa a compressão de resposta
+app.UseResponseCompression();
 
 //app cors
 app.UseHttpsRedirection();
