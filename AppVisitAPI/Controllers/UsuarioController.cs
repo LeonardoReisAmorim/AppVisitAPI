@@ -32,7 +32,7 @@ namespace AppVisitAPI.Controllers
 
             if (usuario == null) return BadRequest("ocorreu um erro ao cadastrar");
 
-            var token = _authenticateService.GenerateToken(usuario.Id, usuario.Email);
+            var token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
 
             return new UserToken { Token = token };
         }
@@ -50,7 +50,7 @@ namespace AppVisitAPI.Controllers
 
             var usuario = await _authenticateService.GetUserByEmail(loginModel.Email);
 
-            var token = _authenticateService.GenerateToken(usuario.Id, usuario.Email);
+            var token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
 
             return new UserToken { Token = token };
         }

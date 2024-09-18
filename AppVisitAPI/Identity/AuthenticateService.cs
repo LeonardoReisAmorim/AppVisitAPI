@@ -39,18 +39,18 @@ namespace AppVisitAPI.Identity
             return true;
         }
 
-        public string GenerateToken(int id, string email)
+        public async Task<string> GenerateToken(int id, string email)
         {
             var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretKey"]));
             var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.HmacSha256Signature);
-            var usuarioIsAdmin = this.GetUserByEmail(email).Result.IsAdmin;
+            var usuario = await this.GetUserByEmail(email);
             var tokenConfig = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim("id", id.ToString()),
                     new Claim("email", email),
-                    new Claim("admin", usuarioIsAdmin.ToString()),
+                    new Claim("admin", usuario.IsAdmin.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(60),
@@ -70,13 +70,7 @@ namespace AppVisitAPI.Identity
 
         public async Task<bool> UserExists(string email)
         {
-            var usuario = await _context.Usuarios.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
-            if (usuario == null)
-            {
-                return false;
-            }
-
-            return true;
+            return await _context.Usuarios.AnyAsync(x => x.Email.ToLower() == email.ToLower());
         }
     }
 }
