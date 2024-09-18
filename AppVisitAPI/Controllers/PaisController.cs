@@ -1,11 +1,13 @@
 ﻿using AppVisitAPI.DTOs.PaisDTO;
 using AppVisitAPI.Interfaces.IPais;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class PaisController : ControllerBase
     {
         public IPaisService _IPaisService;
@@ -59,6 +61,8 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeletePais(int id)
         {
+            var user = User;
+
             var result = await _IPaisService.DeletePais(id);
 
             if (result)

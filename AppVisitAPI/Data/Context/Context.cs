@@ -38,5 +38,6 @@ namespace AppVisitAPI.Data.Context
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Lugar> Lugares { get; set; }
         public DbSet<Pais> Paises { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
