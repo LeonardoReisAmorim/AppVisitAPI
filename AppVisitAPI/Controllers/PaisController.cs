@@ -2,6 +2,7 @@
 using AppVisitAPI.Interfaces.IPais;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AppVisitAPI.Extensions;
 
 namespace AppVisitAPI.Controllers
 {
@@ -61,7 +62,10 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeletePais(int id)
         {
-            var user = User;
+            if (!User.IsAdmin())
+            {
+                BadRequest("apenas administradores podem remover");
+            }
 
             var result = await _IPaisService.DeletePais(id);
 

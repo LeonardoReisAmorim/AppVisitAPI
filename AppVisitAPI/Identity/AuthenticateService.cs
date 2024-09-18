@@ -41,25 +41,26 @@ namespace AppVisitAPI.Identity
 
         public string GenerateToken(int id, string email)
         {
-            var claims = new[]
+            var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretKey"]));
+            var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.HmacSha256Signature);
+            var usuarioIsAdmin = this.GetUserByEmail(email).Result.IsAdmin;
+            var tokenConfig = new SecurityTokenDescriptor
             {
-                new Claim("id", id.ToString()),
-                new Claim("email", email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("id", id.ToString()),
+                    new Claim("email", email),
+                    new Claim("admin", usuarioIsAdmin.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(60),
+                SigningCredentials = credentials
             };
 
-            var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretKey"]));
-            var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddMinutes(60);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenConfig);
 
-            JwtSecurityToken token = new JwtSecurityToken(
-                    issuer: _configuration["jwt:issuer"],
-                    audience: _configuration["jwt:audience"],
-                    claims: claims,
-                    signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return tokenHandler.WriteToken(token);
         }
 
         public async Task<Usuario> GetUserByEmail(string email)
