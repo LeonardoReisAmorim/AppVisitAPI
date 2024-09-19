@@ -1,11 +1,13 @@
 ﻿using AppVisitAPI.DTOs.CidadeDTO;
 using AppVisitAPI.Interfaces.ICidade;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class CidadeController : ControllerBase
     {
         private readonly ICidadeService _ICidadeService;

@@ -22,11 +22,11 @@ namespace AppVisitAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserToken>> Incluir(UsuarioDTO usuarioDto)
         {
-            if (usuarioDto == null) return BadRequest("dados invalidos");
+            if (usuarioDto == null) return BadRequest("necessário enviar todos os dados");
 
             var emailExiste = await _authenticateService.UserExists(usuarioDto.Email);
 
-            if (emailExiste) return BadRequest("ja possui um email cadastrado");
+            if (emailExiste) return BadRequest($"o email {usuarioDto.Email} está cadastrado");
 
             var usuario = await _usuarioService.Incluir(usuarioDto);
 
@@ -34,7 +34,7 @@ namespace AppVisitAPI.Controllers
 
             var token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
 
-            return new UserToken { Token = token };
+            return new UserToken { Token = token, UsuarioId = usuario.Id };
         }
 
         [HttpPost("login")]
@@ -52,7 +52,7 @@ namespace AppVisitAPI.Controllers
 
             var token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
 
-            return new UserToken { Token = token };
+            return new UserToken { Token = token, UsuarioId = usuario.Id };
         }
     }
 }

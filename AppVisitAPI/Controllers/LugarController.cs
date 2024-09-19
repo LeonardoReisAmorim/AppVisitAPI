@@ -1,11 +1,13 @@
 ﻿using AppVisitAPI.DTOs.LugarDTO;
 using AppVisitAPI.Interfaces.ILugar;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class LugarController : ControllerBase
     {
         private readonly ILugarService _ILugarService;

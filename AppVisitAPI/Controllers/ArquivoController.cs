@@ -1,5 +1,6 @@
 ﻿using AppVisitAPI.DTOs.ArquivoDTO;
 using AppVisitAPI.Interfaces.IArquivo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -7,6 +8,7 @@ namespace AppVisitAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class ArquivoController : ControllerBase
     {
         private readonly IArquivoService _IArquivoService;

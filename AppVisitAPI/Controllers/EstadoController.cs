@@ -1,11 +1,13 @@
 ﻿using AppVisitAPI.DTOs.EstadoDTO;
 using AppVisitAPI.Interfaces.IEstado;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class EstadoController : ControllerBase
     {
         private readonly IEstadoService _IEstadoService;
