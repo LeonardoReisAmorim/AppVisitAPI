@@ -1,4 +1,5 @@
 ﻿using AppVisitAPI.Data.Context;
+using AppVisitAPI.DTOs.ArquivoDTO;
 using AppVisitAPI.Interfaces.IArquivo;
 using AppVisitAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -46,18 +47,23 @@ namespace AppVisitAPI.Repositories
             return arquivo;
         }
 
-        public async Task<bool> UpdateArquivo(int id, Arquivo arquivo)
+        public async Task<bool> UpdateArquivo(int id, EditarArquivo arquivo)
         {
-            _context.Entry(arquivo).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return true;
+            var result = await _context.Arquivos
+                        .Where(arquivo => arquivo.Id == id)
+                        .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(a => a.ArquivoConteudo, arquivo.Arquivo)
+                        .SetProperty(a => a.NomeArquivo, arquivo.NomeArquivo)
+                        .SetProperty(a => a.DataCriacao, arquivo.DataCriacao));
+            return result > 0;
         }
 
-        public async Task<bool> DeleteArquivo(Arquivo arquivo)
+        public async Task<bool> DeleteArquivo(int id)
         {
-            _context.Remove(arquivo);
-            await _context.SaveChangesAsync();
-            return true;
+            var result = await _context.Arquivos
+                .Where(arquivo => arquivo.Id == id)
+                .ExecuteDeleteAsync();
+            return result > 0;
         }
 
         public Arquivo GetArquivoById(int id)

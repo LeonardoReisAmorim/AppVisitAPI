@@ -50,23 +50,12 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateArquivo(int id, EditarArquivo editarArquivoDTO)
         {
-            var arquivo = _IArquivoRepository.GetArquivoById(id);
-
-            if (arquivo is null)
-            {
-                return false;
-            }
-
-            arquivo.ArquivoConteudo = editarArquivoDTO.Arquivo;
-            arquivo.NomeArquivo = editarArquivoDTO.NomeArquivo;
-
-            return await _IArquivoRepository.UpdateArquivo(id, arquivo);
+            return await _IArquivoRepository.UpdateArquivo(id, editarArquivoDTO);
         }
 
         public async Task<bool> DeleteArquivo(int id)
         {
-            var arquivo = _IArquivoRepository.GetArquivoById(id);
-            return await _IArquivoRepository.DeleteArquivo(arquivo);
+            return await _IArquivoRepository.DeleteArquivo(id);
         }
     }
 }

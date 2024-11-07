@@ -29,27 +29,13 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdatePais(int id, EditarPaisDTO updatePaisDTO)
         {
-            var pais = await _IPaisRepository.GetPaisById(id);
-
-            if (pais is null)
-            {
-                return false;
-            }
-
-            _mapper.Map(updatePaisDTO, pais);
+            Pais pais = _mapper.Map<Pais>(updatePaisDTO);
             return await _IPaisRepository.UpdatePais(id, pais);
         }
 
         public async Task<bool> DeletePais(int id)
         {
-            var pais = await _IPaisRepository.GetPaisById(id);
-
-            if (pais is null)
-            {
-                return false;
-            }
-
-            return await _IPaisRepository.DeletePais(pais);
+            return await _IPaisRepository.DeletePais(id);
         }
     }
 }

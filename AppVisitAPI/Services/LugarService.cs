@@ -38,27 +38,12 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateLugar(int id, EditarLugarDTO updateLugarDTO)
         {
-            var lugar = await _ILugarRepository.GetLugarById(id);
-
-            if (lugar is null)
-            {
-                return false;
-            }
-
-            _mapper.Map(updateLugarDTO, lugar);
-            return await _ILugarRepository.UpdateLugar(id, lugar);
+            return await _ILugarRepository.UpdateLugar(id, updateLugarDTO);
         }
 
         public async Task<bool> DeleteLugar(int id)
         {
-            var lugar = await _ILugarRepository.GetLugarById(id);
-
-            if (lugar is null)
-            {
-                return false;
-            }
-
-            return await _ILugarRepository.DeleteLugar(lugar);
+            return await _ILugarRepository.DeleteLugar(id);
         }
     }
 }

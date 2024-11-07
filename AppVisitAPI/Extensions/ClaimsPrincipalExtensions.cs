@@ -6,7 +6,7 @@ namespace AppVisitAPI.Extensions
     {
         public static bool IsAdmin(this ClaimsPrincipal user)
         {
-            return Boolean.Parse(user.FindFirst("admin").Value);
+            return Boolean.Parse(user?.FindFirst("admin").Value);
         }
     }
 }

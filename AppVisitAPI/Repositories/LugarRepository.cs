@@ -27,9 +27,10 @@ namespace AppVisitAPI.Repositories
             if (id.HasValue)
             { 
                 return await _context.Lugares.AsNoTracking()
-                             .Where(lugar => lugar.Id == id)
                              .Include(lugar => lugar.Arquivo)
                              .Include(lugar => lugar.Cidade)
+                             .Where(lugar => lugar.Id == id)
+                             .AsSplitQuery()
                              .Select(lugar => new LerLugarDTO
                              {
                                  ArquivoId = lugar.ArquivoId,
@@ -48,6 +49,7 @@ namespace AppVisitAPI.Repositories
             return await _context.Lugares.AsNoTracking()
                          .Include(lugar => lugar.Arquivo)
                          .Include(lugar => lugar.Cidade)
+                         .AsSplitQuery()
                          .Select(lugar => new LerLugarDTO
                          {
                              ArquivoId = lugar.ArquivoId,
@@ -77,18 +79,26 @@ namespace AppVisitAPI.Repositories
                          .SingleOrDefaultAsync();
         }
 
-        public async Task<bool> UpdateLugar(int id, Lugar lugar)
+        public async Task<bool> UpdateLugar(int id, EditarLugarDTO lugar)
         {
-            _context.Entry(lugar).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return true;
+            var result = await _context.Lugares
+                .Where(lugar => lugar.Id == id)
+                .ExecuteUpdateAsync(setters => setters
+                .SetProperty(l => l.ArquivoId, lugar.ArquivoId)
+                .SetProperty(l => l.Descricao, lugar.Descricao)
+                .SetProperty(l => l.CidadeId, lugar.CidadeId)
+                .SetProperty(l => l.Imagem, Convert.FromBase64String(lugar.Imagem))
+                .SetProperty(l => l.InstrucoesUtilizacaoVR, lugar.InstrucoesUtilizacaoVR)
+                .SetProperty(l => l.Nome, lugar.Nome));
+            return result > 0;
         }
 
-        public async Task<bool> DeleteLugar(Lugar lugar)
+        public async Task<bool> DeleteLugar(int id)
         {
-            _context.Remove(lugar);
-            await _context.SaveChangesAsync();
-            return true;
+            var result = await _context.Lugares
+                .Where(lugar => lugar.Id == id)
+                .ExecuteDeleteAsync();
+            return result > 0;
         }
 
         public async Task<bool> ExistsArquivo(int arquivoId)

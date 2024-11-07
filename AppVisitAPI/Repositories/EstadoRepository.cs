@@ -34,16 +34,20 @@ namespace AppVisitAPI.Repositories
 
         public async Task<bool> UpdateEstado(int id, Estado estado)
         {
-            _context.Entry(estado).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return true;
+            var result = await _context.Estados
+                        .Where(estado => estado.Id == id)
+                        .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(e => e.PaisId, estado.PaisId)
+                        .SetProperty(e => e.Nome, estado.Nome));
+            return result > 0;
         }
 
-        public async Task<bool> DeleteEstado(Estado estado)
+        public async Task<bool> DeleteEstado(int id)
         {
-            _context.Remove(estado);
-            await _context.SaveChangesAsync();
-            return true;
+            var result = await _context.Estados
+                        .Where(estado => estado.Id == id)
+                        .ExecuteDeleteAsync();
+            return result > 0;
         }
 
         public async Task<Estado> GetEstadoById(int id)

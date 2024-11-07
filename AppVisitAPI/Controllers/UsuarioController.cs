@@ -42,11 +42,11 @@ namespace AppVisitAPI.Controllers
         {
             var existe = await _authenticateService.UserExists(loginModel.Email);
 
-            if (!existe) return BadRequest("usuario nao existe");
+            if (!existe) return BadRequest("Usuário não existe");
 
             var result = await _authenticateService.AuthenticateAsync(loginModel.Email, loginModel.Password);
 
-            if (!result) return BadRequest("senha invalida");
+            if (!result) return BadRequest("Senha inválida");
 
             var usuario = await _authenticateService.GetUserByEmail(loginModel.Email);
 

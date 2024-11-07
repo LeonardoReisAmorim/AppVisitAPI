@@ -7,7 +7,7 @@ namespace AppVisitAPI.Interfaces.ICidade
         Task<Cidade> CreateCidade(Cidade cidade);
         Task<List<Cidade>> GetCidade(int? id = null);
         Task<bool> UpdateCidade(int id, Cidade cidade);
-        Task<bool> DeleteCidade(Cidade cidade);
+        Task<bool> DeleteCidade(int id);
         Task<Cidade> GetCidadeById(int id);
     }
 }

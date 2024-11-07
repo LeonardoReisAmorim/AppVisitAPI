@@ -29,26 +29,13 @@ namespace AppVisitAPI.Services
 
         public async Task<bool> UpdateEstado(int id, EditarEstadoDTO updateEstadoDTO)
         {
-            var estado = await _IEstadoRepository.GetEstadoById(id);
-
-            if (estado is null)
-            {
-                return false;
-            }
-            _mapper.Map(updateEstadoDTO, estado);
+            Estado estado = _mapper.Map<Estado>(updateEstadoDTO);
             return await _IEstadoRepository.UpdateEstado(id, estado);
         }
 
         public async Task<bool> DeleteEstado(int id)
         {
-            var estado = await _IEstadoRepository.GetEstadoById(id);
-
-            if (estado is null)
-            {
-                return false;
-            }
-
-            return await _IEstadoRepository.DeleteEstado(estado);
+            return await _IEstadoRepository.DeleteEstado(id);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace AppVisitAPI.Interfaces.IPais
         Task<Pais> CreatePais(Pais pais);
         Task<List<Pais>> GetPais(int? id = null);
         Task<bool> UpdatePais(int id, Pais pais);
-        Task<bool> DeletePais(Pais pais);
+        Task<bool> DeletePais(int id);
         Task<Pais> GetPaisById(int id);
     }
 }
