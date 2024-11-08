@@ -1,14 +1,8 @@
-using AppVisitAPI.Account;
-using AppVisitAPI.Data.Context;
-using AppVisitAPI.Identity;
-using AppVisitAPI.Interfaces.IArquivo;
-using AppVisitAPI.Interfaces.ICidade;
-using AppVisitAPI.Interfaces.IEstado;
-using AppVisitAPI.Interfaces.ILugar;
-using AppVisitAPI.Interfaces.IPais;
-using AppVisitAPI.Interfaces.IUsuario;
-using AppVisitAPI.Repositories;
-using AppVisitAPI.Services;
+using Application.Interfaces;
+using Application.Services;
+using Infrastructure.Data.Context;
+using Infrastructure.Interfaces;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -55,19 +49,26 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<Context>(x => x.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnection")));
 //builder.Services.AddDbContext<Context>(x => x.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IPaisService, PaisService>();
-builder.Services.AddScoped<IPaisRepository, PaisRepository>();
-builder.Services.AddScoped<IEstadoService, EstadoService>();
-builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
-builder.Services.AddScoped<ICidadeService, CidadeService>();
-builder.Services.AddScoped<ICidadeRepository, CidadeRepository>();
-builder.Services.AddScoped<ILugarService, LugarService>();
-builder.Services.AddScoped<ILugarRepository, LugarRepository>();
-builder.Services.AddScoped<IArquivoService, ArquivoService>();
-builder.Services.AddScoped<IArquivoRepository, ArquivoRepository>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+#region Services
+builder.Services.AddScoped<ICountryService, CountryService>();
+builder.Services.AddScoped<IStateService, StateService>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IPlaceService, PlaceService>();
+builder.Services.AddScoped<IFileVRService, FileVRService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
+#endregion
+
+#region Repositories
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IStateRepository, StateRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
+builder.Services.AddScoped<IFileVRRepository, FileVRRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthenticateRepository, AuthenticateRepository>();
+#endregion
 
 builder.Services.Configure<KestrelServerOptions>(options =>
 {
