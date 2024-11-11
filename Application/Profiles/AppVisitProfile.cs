@@ -23,8 +23,8 @@ namespace Application.Profiles
 
             CreateMap<PlaceDTO, Place>()
                 .ForMember(x => x.Image, y => y.MapFrom(a => Convert.FromBase64String(a.Image)));
-            //CreateMap<Place, ReadPlaceDTO>()
-            //.ForMember(x => x.Imagem, y => y.MapFrom(a => Convert.ToBase64String(a.Imagem)));
+            CreateMap<Place, ReadPlaceDTO>()
+            .ForMember(x => x.Image, y => y.MapFrom(a => Convert.ToBase64String(a.Image)));
 
             CreateMap<User, UserDTO>().ReverseMap();
         }

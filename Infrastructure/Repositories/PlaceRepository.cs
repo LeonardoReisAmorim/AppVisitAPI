@@ -30,18 +30,23 @@ namespace Infrastructure.Repositories
                              .Include(place => place.City)
                              .Where(place => place.Id == id)
                              .AsSplitQuery()
-                             //.Select(lugar => new LerLugarDTO
-                             //{
-                             //    ArquivoId = lugar.ArquivoId,
-                             //    Cidade = lugar.Cidade.Nome,
-                             //    Descricao = lugar.Descricao,
-                             //    Id = lugar.Id,
-                             //    Imagem = Convert.ToBase64String(lugar.Imagem),
-                             //    Nome = lugar.Nome,
-                             //    NomeArquivo = lugar.Arquivo.NomeArquivo,
-                             //    CidadeId = lugar.CidadeId,
-                             //    InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
-                             //})
+                             .Select(x => new Place
+                             {
+                                 City = x.City,
+                                 CityId = x.CityId,
+                                 Description = x.Description,
+                                 FileVR = new FileVR
+                                 {
+                                     CreatedAt = x.FileVR.CreatedAt,
+                                     FileName = x.FileVR.FileName,
+                                     Id = x.FileVR.Id
+                                 },
+                                 Id = x.Id,
+                                 FileVRId = x.FileVR.Id,
+                                 Image = x.Image,
+                                 Name = x.Name,
+                                 UsageInstructionsVR = x.UsageInstructionsVR
+                             })
                              .ToListAsync();
             }
 
@@ -49,18 +54,23 @@ namespace Infrastructure.Repositories
                          .Include(place => place.FileVR)
                          .Include(place => place.City)
                          .AsSplitQuery()
-                         //.Select(lugar => new LerLugarDTO
-                         //{
-                         //    ArquivoId = lugar.ArquivoId,
-                         //    Cidade = lugar.Cidade.Nome,
-                         //    Descricao = lugar.Descricao,
-                         //    Id = lugar.Id,
-                         //    Imagem = Convert.ToBase64String(lugar.Imagem),
-                         //    Nome = lugar.Nome,
-                         //    NomeArquivo = lugar.Arquivo.NomeArquivo,
-                         //    CidadeId = lugar.CidadeId,
-                         //    InstrucoesUtilizacaoVR = lugar.InstrucoesUtilizacaoVR
-                         //})
+                         .Select(x => new Place
+                         {
+                             City = x.City,
+                             CityId = x.CityId,
+                             Description = x.Description,
+                             FileVR = new FileVR
+                             {
+                                 CreatedAt = x.FileVR.CreatedAt,
+                                 FileName = x.FileVR.FileName,
+                                 Id = x.FileVR.Id
+                             },
+                             Id = x.Id,
+                             FileVRId = x.FileVR.Id,
+                             Image = x.Image,
+                             Name = x.Name,
+                             UsageInstructionsVR = x.UsageInstructionsVR
+                         })
                          .ToListAsync();
         }
 
