@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.StateDTO;
 using Application.Interfaces;
+using AppVisitAPI.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,6 +40,11 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateEstado([FromBody] StateDTO estadoDTO)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem adicionar registros" });
+            }
+
             var estadoCriado = await _stateService.CreateEstado(estadoDTO);
 
             return CreatedAtAction(nameof(GetEstadoById), new { estadoCriado.Id }, estadoCriado);
@@ -47,6 +53,11 @@ namespace AppVisitAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditEstado(int id, [FromBody] StateDTO editarEstadoDTO)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem atualizar registros" });
+            }
+
             var result = await _stateService.UpdateEstado(id, editarEstadoDTO);
 
             if (result)
@@ -60,6 +71,11 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEstado(int id)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem remover" });
+            }
+
             var result = await _stateService.DeleteEstado(id);
 
             if (result)

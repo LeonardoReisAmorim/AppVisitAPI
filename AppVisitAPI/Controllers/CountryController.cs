@@ -41,6 +41,11 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreatePais([FromBody] CountryDTO paisDTO)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem adicionar registros" });
+            }
+
             var paisCriado = await _countryService.CreatePais(paisDTO);
 
             return CreatedAtAction(nameof(GetPaisById), new { paisCriado.Id }, paisCriado);
@@ -49,6 +54,11 @@ namespace AppVisitAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditPais(int id, [FromBody] CountryDTO editarPaisDTO)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem atualizar registros" });
+            }
+
             var result = await _countryService.UpdatePais(id, editarPaisDTO);
 
             if (result)
@@ -64,7 +74,7 @@ namespace AppVisitAPI.Controllers
         {
             if (!User.IsAdmin())
             {
-                BadRequest("apenas administradores podem remover");
+                BadRequest(new { error = "Apenas administradores podem remover" });
             }
 
             var result = await _countryService.DeletePais(id);

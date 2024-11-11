@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.PlaceDTO;
 using Application.Interfaces;
+using AppVisitAPI.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,7 +54,12 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateLugar([FromBody] PlaceDTO lugarDTO)
         {
-            if(lugarDTO.FileVRId == 0 || lugarDTO.CityId == 0)
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem adicionar registros" });
+            }
+
+            if (lugarDTO.FileVRId == 0 || lugarDTO.CityId == 0)
             {
                 return BadRequest(new { error = "necessário informar o arquivo e a cidade" });
             }
@@ -66,7 +72,12 @@ namespace AppVisitAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditLugar(int id, [FromBody] PlaceDTO editarLugarDTO)
         {
-            if(editarLugarDTO.CityId == 0 || editarLugarDTO.FileVRId == 0)
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem atualizar registros" });
+            }
+
+            if (editarLugarDTO.CityId == 0 || editarLugarDTO.FileVRId == 0)
             {
                 return BadRequest(new { error = "necessário informar o arquivo e a cidade" });
             }
@@ -84,6 +95,11 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteLugar(int id)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem remover" });
+            }
+
             var result = await _placeService.DeleteLugar(id);
             
             if (result)

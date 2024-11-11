@@ -21,15 +21,15 @@ namespace AppVisitAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserToken>> Incluir(UserDTO usuarioDto)
         {
-            if (usuarioDto == null) return BadRequest("necessário enviar todos os dados");
+            if (usuarioDto == null) return BadRequest(new { error = "necessário enviar todos os dados" });
 
             var emailExiste = await _authenticateService.UserExists(usuarioDto.Email);
 
-            if (emailExiste) return BadRequest($"o email {usuarioDto.Email} está cadastrado");
+            if (emailExiste) return BadRequest(new { error = $"o email {usuarioDto.Email} está cadastrado" });
 
             var usuario = await _usuarioService.Incluir(usuarioDto);
 
-            if (usuario == null) return BadRequest("ocorreu um erro ao cadastrar");
+            if (usuario == null) return BadRequest(new { error = "ocorreu um erro ao cadastrar" });
 
             var token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
 
@@ -41,11 +41,11 @@ namespace AppVisitAPI.Controllers
         {
             var existe = await _authenticateService.UserExists(loginModel.Email);
 
-            if (!existe) return BadRequest("Usuário não existe");
+            if (!existe) return BadRequest(new { error = "Usuário não existe" });
 
             var result = await _authenticateService.AuthenticateAsync(loginModel.Email, loginModel.Password);
 
-            if (!result) return BadRequest("Senha inválida");
+            if (!result) return BadRequest(new { error = "Senha inválida" });
 
             var usuario = await _authenticateService.GetUserByEmail(loginModel.Email);
 

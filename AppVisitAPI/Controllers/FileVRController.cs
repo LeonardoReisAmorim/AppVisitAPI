@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.FileVRDTO;
 using Application.Interfaces;
+using AppVisitAPI.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -48,6 +49,11 @@ namespace AppVisitAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateArquivo()
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem adicionar registros" });
+            }
+
             var file = Request.Form.Files[0];
             var lerArquivo = new ReadFileVRDTO();
             
@@ -74,6 +80,11 @@ namespace AppVisitAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateArquivo(int id)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem atualizar registros" });
+            }
+
             var file = Request.Form.Files[0];
 
             if (!file.FileName.Contains(".zip"))
@@ -105,6 +116,11 @@ namespace AppVisitAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArquivo(int id)
         {
+            if (!User.IsAdmin())
+            {
+                BadRequest(new { error = "Apenas administradores podem remover" });
+            }
+
             var result = await _fileVRService.DeleteArquivo(id);
 
             if (result)
