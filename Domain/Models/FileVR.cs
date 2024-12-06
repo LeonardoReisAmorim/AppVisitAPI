@@ -18,6 +18,9 @@ namespace Domain.Models
         [Required]
         public DateTime CreatedAt { get; set; }
 
+        [Required]
+        public DateTime UpdatedAt { get; set; }
+
         [JsonIgnore]
         public virtual Place Place { get; set; }
 

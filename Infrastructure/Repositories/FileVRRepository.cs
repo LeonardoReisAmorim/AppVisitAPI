@@ -25,17 +25,19 @@ namespace Infrastructure.Repositories
             {
                 return await _context.FilesVr.AsNoTracking().Where(a => a.Id == id).Select(fileVr => new FileVR
                 {
-                    CreatedAt = fileVr.CreatedAt,
                     Id = fileVr.Id,
                     FileName = fileVr.FileName,
+                    CreatedAt = fileVr.CreatedAt,
+                    UpdatedAt = fileVr.UpdatedAt
                 }).ToListAsync();
             }
 
             return await _context.FilesVr.AsNoTracking().Select(fileVr => new FileVR
             {
-                CreatedAt = fileVr.CreatedAt,
                 Id = fileVr.Id,
                 FileName = fileVr.FileName,
+                CreatedAt = fileVr.CreatedAt,
+                UpdatedAt = fileVr.UpdatedAt
             }).ToListAsync();
         }
 
@@ -53,7 +55,7 @@ namespace Infrastructure.Repositories
                         .ExecuteUpdateAsync(setters => setters
                         .SetProperty(a => a.FileContent, fileVr.FileContent)
                         .SetProperty(a => a.FileName, fileVr.FileName)
-                        .SetProperty(a => a.CreatedAt, fileVr.CreatedAt));
+                        .SetProperty(a => a.UpdatedAt, fileVr.UpdatedAt));
             return result > 0;
         }
 

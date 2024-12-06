@@ -27,7 +27,8 @@ namespace Application.Services
             {
                 Id = a.Id,
                 FileName = a.FileName,
-                CreatedAt = a.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
+                CreatedAt = a.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss"),
+                UpdatedAt = a.UpdatedAt.ToString("dd/MM/yyyy HH:mm:ss")
             });
 
         }
@@ -38,7 +39,8 @@ namespace Application.Services
             {
                 FileContent = arquivoDTO,
                 FileName = arquivodados.FileName,
-                CreatedAt = arquivodados.CreatedAt
+                CreatedAt = arquivodados.CreatedAt,
+                UpdatedAt = arquivodados.CreatedAt
             };
 
             var result = await _fileVRRepository.CreateArquivo(arquivo);
@@ -55,7 +57,7 @@ namespace Application.Services
             {
                 FileContent = editarArquivoDTO.Content,
                 FileName = editarArquivoDTO.FileName,
-                CreatedAt = editarArquivoDTO.CreatedAt
+                UpdatedAt = editarArquivoDTO.UpdatedAt
             };
 
             return await _fileVRRepository.UpdateArquivo(id, arquivo);
