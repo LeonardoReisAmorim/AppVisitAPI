@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.UserDTO;
 using Application.Interfaces;
 using AppVisitAPI.ModelsApi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppVisitAPI.Controllers
@@ -23,15 +24,15 @@ namespace AppVisitAPI.Controllers
         {
             if (usuarioDto == null) return BadRequest(new { error = "necessário enviar todos os dados" });
 
-            var emailExiste = await _authenticateService.UserExists(usuarioDto.Email);
+            bool emailExiste = await _authenticateService.UserExists(usuarioDto.Email);
 
             if (emailExiste) return BadRequest(new { error = $"o email {usuarioDto.Email} está cadastrado" });
 
-            var usuario = await _usuarioService.Incluir(usuarioDto);
+            UserDTO usuario = await _usuarioService.Incluir(usuarioDto);
 
             if (usuario == null) return BadRequest(new { error = "ocorreu um erro ao cadastrar" });
 
-            var token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
+            string token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
 
             return new UserToken { Token = token, UsuarioId = usuario.Id };
         }
@@ -39,19 +40,30 @@ namespace AppVisitAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserToken>> Selecionar(LoginModel loginModel)
         {
-            var existe = await _authenticateService.UserExists(loginModel.Email);
+            bool existe = await _authenticateService.UserExists(loginModel.Email);
 
             if (!existe) return BadRequest(new { error = "Usuário não existe" });
 
-            var result = await _authenticateService.AuthenticateAsync(loginModel.Email, loginModel.Password);
+            bool validPassword = await _authenticateService.AuthenticateAsync(loginModel.Email, loginModel.Password);
 
-            if (!result) return BadRequest(new { error = "Senha inválida" });
+            if (!validPassword) return BadRequest(new { error = "Senha inválida" });
 
-            var usuario = await _authenticateService.GetUserByEmail(loginModel.Email);
+            UserDTO usuario = await _authenticateService.GetUserByEmail(loginModel.Email);
 
-            var token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
+            string token = await _authenticateService.GenerateToken(usuario.Id, usuario.Email);
 
             return new UserToken { Token = token, UsuarioId = usuario.Id };
+        }
+
+        [HttpGet("getUserById/{id}")]
+        [Authorize]
+        public async Task<ActionResult<UserDTO>> GetUserById(int id)
+        {
+            UserDTO userDTO = await _usuarioService.SelecionarAsync(id);
+
+            if (userDTO is null) return NotFound();
+
+            return Ok(userDTO);
         }
     }
 }

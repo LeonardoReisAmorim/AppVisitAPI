@@ -1,5 +1,6 @@
-﻿using Application.Interfaces;
-using Domain.Models;
+﻿using Application.DTOs.UserDTO;
+using Application.Interfaces;
+using AutoMapper;
 using Infrastructure.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -14,11 +15,13 @@ namespace Application.Services
     {
         private readonly IAuthenticateRepository _authenticateRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AuthenticateService(IAuthenticateRepository authenticateRepository, IConfiguration configuration)
+        public AuthenticateService(IAuthenticateRepository authenticateRepository, IConfiguration configuration, IMapper mapper)
         {
             _authenticateRepository = authenticateRepository;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task<bool> AuthenticateAsync(string email, string senha)
@@ -68,9 +71,9 @@ namespace Application.Services
             return await _authenticateRepository.UserExists(email);
         }
 
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<UserDTO> GetUserByEmail(string email)
         {
-            return await _authenticateRepository.GetUserByEmail(email);
+            return _mapper.Map<UserDTO>(await _authenticateRepository.GetUserByEmail(email));
         }
     }
 }

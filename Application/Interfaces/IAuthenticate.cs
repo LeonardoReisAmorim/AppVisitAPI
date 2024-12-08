@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.DTOs.UserDTO;
+using Domain.Models;
 
 namespace Application.Interfaces
 {
@@ -7,6 +8,6 @@ namespace Application.Interfaces
         Task<bool> AuthenticateAsync(string email, string senha);
         public Task<string> GenerateToken(int id, string email);
         Task<bool> UserExists(string email);
-        Task<User> GetUserByEmail(string email);
+        Task<UserDTO> GetUserByEmail(string email);
     }
 }
