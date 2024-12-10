@@ -31,6 +31,11 @@ namespace Infrastructure.Data.Context
                 .HasOne(place => place.City)
                 .WithMany(city => city.Places)
                 .HasForeignKey(place => place.CityId);
+
+            modelBuilder.Entity<TypePlace>()
+                .HasOne(typeplace => typeplace.Place)
+                .WithOne(place => place.TypePlace)
+                .HasForeignKey<Place>(place => place.TypePlaceId);
         }
 
         public DbSet<FileVR> FilesVr { get; set; }
@@ -39,5 +44,6 @@ namespace Infrastructure.Data.Context
         public DbSet<Place> Places { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<TypePlace> TypePlaces { get; set; }
     }
 }

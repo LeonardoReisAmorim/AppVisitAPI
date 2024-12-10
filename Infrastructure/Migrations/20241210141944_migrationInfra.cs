@@ -41,6 +41,20 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TypePlaces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TypePlaces", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -108,7 +122,8 @@ namespace Infrastructure.Migrations
                     FileVRId = table.Column<int>(type: "int", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    UsageInstructionsVR = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UsageInstructionsVR = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypePlaceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,6 +138,12 @@ namespace Infrastructure.Migrations
                         name: "FK_Places_FilesVr_FileVRId",
                         column: x => x.FileVRId,
                         principalTable: "FilesVr",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Places_TypePlaces_TypePlaceId",
+                        column: x => x.TypePlaceId,
+                        principalTable: "TypePlaces",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -141,6 +162,12 @@ namespace Infrastructure.Migrations
                 name: "IX_Places_FileVRId",
                 table: "Places",
                 column: "FileVRId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Places_TypePlaceId",
+                table: "Places",
+                column: "TypePlaceId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -163,6 +190,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "FilesVr");
+
+            migrationBuilder.DropTable(
+                name: "TypePlaces");
 
             migrationBuilder.DropTable(
                 name: "States");

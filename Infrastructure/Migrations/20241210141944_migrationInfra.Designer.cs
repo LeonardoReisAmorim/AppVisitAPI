@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241206141656_migrationInfra")]
+    [Migration("20241210141944_migrationInfra")]
     partial class migrationInfra
     {
         /// <inheritdoc />
@@ -120,6 +120,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TypePlaceId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UsageInstructionsVR")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -129,6 +132,9 @@ namespace Infrastructure.Migrations
                     b.HasIndex("CityId");
 
                     b.HasIndex("FileVRId")
+                        .IsUnique();
+
+                    b.HasIndex("TypePlaceId")
                         .IsUnique();
 
                     b.ToTable("Places");
@@ -154,6 +160,27 @@ namespace Infrastructure.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("States");
+                });
+
+            modelBuilder.Entity("Domain.Models.TypePlace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypePlaces");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -211,9 +238,17 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.TypePlace", "TypePlace")
+                        .WithOne("Place")
+                        .HasForeignKey("Domain.Models.Place", "TypePlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("City");
 
                     b.Navigation("FileVR");
+
+                    b.Navigation("TypePlace");
                 });
 
             modelBuilder.Entity("Domain.Models.State", b =>
@@ -246,6 +281,12 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.State", b =>
                 {
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("Domain.Models.TypePlace", b =>
+                {
+                    b.Navigation("Place")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

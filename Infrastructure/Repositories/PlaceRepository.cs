@@ -45,7 +45,8 @@ namespace Infrastructure.Repositories
                                  FileVRId = x.FileVR.Id,
                                  Image = x.Image,
                                  Name = x.Name,
-                                 UsageInstructionsVR = x.UsageInstructionsVR
+                                 UsageInstructionsVR = x.UsageInstructionsVR,
+                                 TypePlaceId = x.TypePlaceId
                              })
                              .ToListAsync();
             }
@@ -69,7 +70,8 @@ namespace Infrastructure.Repositories
                              FileVRId = x.FileVR.Id,
                              Image = x.Image,
                              Name = x.Name,
-                             UsageInstructionsVR = x.UsageInstructionsVR
+                             UsageInstructionsVR = x.UsageInstructionsVR,
+                             TypePlaceId = x.TypePlaceId
                          })
                          .ToListAsync();
         }
@@ -98,7 +100,8 @@ namespace Infrastructure.Repositories
                 .SetProperty(l => l.CityId, place.CityId)
                 .SetProperty(l => l.Image, place.Image)
                 .SetProperty(l => l.UsageInstructionsVR, place.UsageInstructionsVR)
-                .SetProperty(l => l.Name, place.Name));
+                .SetProperty(l => l.Name, place.Name)
+                .SetProperty(l => l.TypePlaceId, place.TypePlaceId));
             return result > 0;
         }
 

@@ -42,7 +42,8 @@ namespace Application.Services
                        Name = lugar.Name,
                        FileName = lugar.FileVR.FileName,
                        CityId = lugar.CityId,
-                       UsageInstructionsVR = lugar.UsageInstructionsVR
+                       UsageInstructionsVR = lugar.UsageInstructionsVR,
+                       TypePlaceId = lugar.TypePlaceId
                    }).ToList();
         }
 

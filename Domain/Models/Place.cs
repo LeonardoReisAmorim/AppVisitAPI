@@ -33,5 +33,11 @@ namespace Domain.Models
 
         [Required]
         public string UsageInstructionsVR { get; set; }
+
+        [Required]
+        public int TypePlaceId { get; set; }
+
+        [JsonIgnore]
+        public virtual TypePlace TypePlace { get; set; }
     }
 }

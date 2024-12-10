@@ -2,6 +2,7 @@
 using Application.DTOs.CountryDTO;
 using Application.DTOs.PlaceDTO;
 using Application.DTOs.StateDTO;
+using Application.DTOs.TypePlaceDTO;
 using Application.DTOs.UserDTO;
 using AutoMapper;
 using Domain.Models;
@@ -27,6 +28,8 @@ namespace Application.Profiles
             .ForMember(x => x.Image, y => y.MapFrom(a => Convert.ToBase64String(a.Image)));
 
             CreateMap<User, UserDTO>().ReverseMap();
+
+            CreateMap<TypePlace, TypePlaceDTO>().ReverseMap();
         }
     }
 }

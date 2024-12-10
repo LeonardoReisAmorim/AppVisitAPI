@@ -11,5 +11,6 @@
         public string City { get; set; }
         public string FileName { get; set; }
         public string UsageInstructionsVR { get; set; }
+        public int TypePlaceId { get; set; }
     }
 }

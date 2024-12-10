@@ -21,5 +21,8 @@ namespace Application.DTOs.PlaceDTO
 
         [Required]
         public string UsageInstructionsVR { get; set; }
+
+        [Required]
+        public int TypePlaceId { get; set; }
     }
 }
