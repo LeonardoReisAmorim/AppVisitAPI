@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Services;
+using Application.Utils;
 using Infrastructure.Data.Context;
 using Infrastructure.Interfaces;
 using Infrastructure.Repositories;
@@ -70,6 +71,10 @@ builder.Services.AddScoped<IFileVRRepository, FileVRRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthenticateRepository, AuthenticateRepository>();
 builder.Services.AddScoped<ITypePlaceRepository, TypePlaceRepository>();
+#endregion
+
+#region Utils
+builder.Services.AddSingleton<FileUtils>();
 #endregion
 
 builder.Services.Configure<KestrelServerOptions>(options =>

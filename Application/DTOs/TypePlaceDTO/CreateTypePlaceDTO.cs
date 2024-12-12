@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.TypePlaceDTO
 {
-    public class TypePlaceDTO
+    public class CreateTypePlaceDTO
     {
         public int Id { get; set; }
         public string Type { get; set; }
-        public byte[]? Image { get; set; }
         public string ImageRequest { get; set; }
     }
 }
