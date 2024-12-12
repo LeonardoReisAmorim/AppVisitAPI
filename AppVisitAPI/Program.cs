@@ -58,6 +58,7 @@ builder.Services.AddScoped<IPlaceService, PlaceService>();
 builder.Services.AddScoped<IFileVRService, FileVRService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
+builder.Services.AddScoped<ITypePlaceService, TypePlaceService>();
 #endregion
 
 #region Repositories
@@ -68,6 +69,7 @@ builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 builder.Services.AddScoped<IFileVRRepository, FileVRRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthenticateRepository, AuthenticateRepository>();
+builder.Services.AddScoped<ITypePlaceRepository, TypePlaceRepository>();
 #endregion
 
 builder.Services.Configure<KestrelServerOptions>(options =>
