@@ -32,10 +32,10 @@ namespace Infrastructure.Data.Context
                 .WithMany(city => city.Places)
                 .HasForeignKey(place => place.CityId);
 
-            modelBuilder.Entity<TypePlace>()
-                .HasOne(typeplace => typeplace.Place)
-                .WithOne(place => place.TypePlace)
-                .HasForeignKey<Place>(place => place.TypePlaceId);
+            modelBuilder.Entity<Place>()
+                .HasOne(place => place.TypePlace)
+                .WithMany(typeplace => typeplace.Places)
+                .HasForeignKey(place => place.TypePlaceId);
         }
 
         public DbSet<FileVR> FilesVr { get; set; }

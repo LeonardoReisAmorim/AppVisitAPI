@@ -21,6 +21,6 @@ namespace Domain.Models
         public string ImageUrl { get; set; }
 
         [JsonIgnore]
-        public virtual Place Place { get; set; }
+        public virtual List<Place> Places { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class migrationInfra : Migration
+    public partial class migrationinfra : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -167,8 +167,7 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Places_TypePlaceId",
                 table: "Places",
-                column: "TypePlaceId",
-                unique: true);
+                column: "TypePlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId",

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241210141944_migrationInfra")]
-    partial class migrationInfra
+    [Migration("20241215131317_migrationinfra")]
+    partial class migrationinfra
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,8 +134,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FileVRId")
                         .IsUnique();
 
-                    b.HasIndex("TypePlaceId")
-                        .IsUnique();
+                    b.HasIndex("TypePlaceId");
 
                     b.ToTable("Places");
                 });
@@ -239,8 +238,8 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.TypePlace", "TypePlace")
-                        .WithOne("Place")
-                        .HasForeignKey("Domain.Models.Place", "TypePlaceId")
+                        .WithMany("Places")
+                        .HasForeignKey("TypePlaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -285,8 +284,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.TypePlace", b =>
                 {
-                    b.Navigation("Place")
-                        .IsRequired();
+                    b.Navigation("Places");
                 });
 #pragma warning restore 612, 618
         }

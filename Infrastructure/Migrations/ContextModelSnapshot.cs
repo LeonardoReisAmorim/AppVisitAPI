@@ -131,8 +131,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FileVRId")
                         .IsUnique();
 
-                    b.HasIndex("TypePlaceId")
-                        .IsUnique();
+                    b.HasIndex("TypePlaceId");
 
                     b.ToTable("Places");
                 });
@@ -236,8 +235,8 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.TypePlace", "TypePlace")
-                        .WithOne("Place")
-                        .HasForeignKey("Domain.Models.Place", "TypePlaceId")
+                        .WithMany("Places")
+                        .HasForeignKey("TypePlaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -282,8 +281,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.TypePlace", b =>
                 {
-                    b.Navigation("Place")
-                        .IsRequired();
+                    b.Navigation("Places");
                 });
 #pragma warning restore 612, 618
         }
