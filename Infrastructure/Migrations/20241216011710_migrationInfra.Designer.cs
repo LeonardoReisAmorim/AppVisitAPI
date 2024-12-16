@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241215131317_migrationinfra")]
-    partial class migrationinfra
+    [Migration("20241216011710_migrationInfra")]
+    partial class migrationInfra
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,7 +240,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Models.TypePlace", "TypePlace")
                         .WithMany("Places")
                         .HasForeignKey("TypePlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("City");

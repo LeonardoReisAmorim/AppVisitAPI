@@ -35,7 +35,8 @@ namespace Infrastructure.Data.Context
             modelBuilder.Entity<Place>()
                 .HasOne(place => place.TypePlace)
                 .WithMany(typeplace => typeplace.Places)
-                .HasForeignKey(place => place.TypePlaceId);
+                .HasForeignKey(place => place.TypePlaceId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         public DbSet<FileVR> FilesVr { get; set; }

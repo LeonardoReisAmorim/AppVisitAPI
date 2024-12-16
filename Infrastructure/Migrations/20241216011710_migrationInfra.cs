@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class migrationinfra : Migration
+    public partial class migrationInfra : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -144,8 +144,7 @@ namespace Infrastructure.Migrations
                         name: "FK_Places_TypePlaces_TypePlaceId",
                         column: x => x.TypePlaceId,
                         principalTable: "TypePlaces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
